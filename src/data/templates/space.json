@@ -1,0 +1,17 @@
+{
+  "id": "space",
+  "label": "مغامرة في الفضاء",
+  "defaultTitlePattern": "مغامرة {heroName} بين النجوم",
+  "coverStyle": "primary",
+  "palette": ["#5D5FEF", "#7437EA", "#FF8A00", "#10204C"],
+  "backgroundImage": "/marketing/cover-space.webp",
+  "wardrobeHint": "بدلة فضاء أصلية بألوان أزرق وبنفسجي وأبيض",
+  "helperSuggestions": ["روبوت مرح", "قطة فضائية", "نجم صغير"],
+  "coverProps": ["كواكب", "نجوم", "صاروخ"],
+  "openAdventure": true,
+  "adventureExamples": [
+    "اكتشاف كوكب جديد",
+    "البحث عن حجر يعيد ضوء النجوم",
+    "إنقاذ مركبة صديق ضائع"
+  ]
+}
