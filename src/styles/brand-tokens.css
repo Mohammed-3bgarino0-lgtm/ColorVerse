@@ -1,0 +1,54 @@
+:root {
+  --cv-orange: #ff8a00;
+  --cv-red: #ff3d5a;
+  --cv-purple: #7c3aed;
+  --cv-blue: #159fea;
+  --cv-green: #22c978;
+  --cv-yellow: #ffc928;
+  --cv-navy: #15224c;
+  --cv-bg: #fffaf4;
+  --cv-white: #ffffff;
+  --cv-muted: #6b7280;
+  --cv-border: rgba(21, 34, 76, 0.12);
+  --cv-shadow: 0 18px 55px rgba(21, 34, 76, 0.12);
+  --cv-radius-sm: 12px;
+  --cv-radius-md: 20px;
+  --cv-radius-lg: 32px;
+  --cv-font-en: 'Inter', system-ui, sans-serif;
+  --cv-font-ar: 'Tajawal', system-ui, sans-serif;
+}
+
+.cv-primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 52px;
+  padding: 0.8rem 1.35rem;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--cv-orange), var(--cv-red));
+  color: var(--cv-white);
+  font-weight: 800;
+  box-shadow: 0 12px 28px rgba(255, 61, 90, 0.25);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.cv-primary-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(255, 61, 90, 0.32);
+}
+
+.cv-hero-media-mask {
+  overflow: hidden;
+  border-radius: 44% 56% 52% 48% / 48% 43% 57% 52%;
+  box-shadow: var(--cv-shadow);
+  isolation: isolate;
+}
+
+.cv-metric-number {
+  font-family: var(--cv-font-en);
+  font-variant-numeric: tabular-nums;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
