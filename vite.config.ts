@@ -3,7 +3,10 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
+  const isGitHubPages = process.env.GITHUB_ACTIONS === 'true';
+
   return {
+    base: isGitHubPages ? '/ColorVerse/' : '/',
     plugins: [react()],
     server: {
       host: '0.0.0.0',
