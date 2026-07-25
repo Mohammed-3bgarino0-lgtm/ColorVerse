@@ -1,0 +1,17 @@
+{
+  "id": "jungle",
+  "label": "حيوانات الغابة",
+  "defaultTitlePattern": "{heroName} وأصدقاء الغابة",
+  "coverStyle": "primary",
+  "palette": ["#169B62", "#43B96F", "#FFB02E", "#10204C"],
+  "backgroundImage": "/marketing/cover-jungle.webp",
+  "wardrobeHint": "ملابس مستكشف طفل عملية وملونة",
+  "helperSuggestions": ["أرنب لطيف", "قرد مرح", "طائر ملوّن"],
+  "coverProps": ["أشجار", "شلال", "حيوانات ودودة"],
+  "openAdventure": true,
+  "adventureExamples": [
+    "حماية الغابة من خطر",
+    "البحث عن كنز مفقود",
+    "مساعدة حيوان صغير في العودة لعائلته"
+  ]
+}
