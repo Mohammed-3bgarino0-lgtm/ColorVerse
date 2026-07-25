@@ -1,7 +1,7 @@
 {
   "name": "colorverse-kids-book-generator",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "Bilingual Arabic and English AI-powered kids coloring book generator.",
   "engines": {
@@ -34,6 +34,9 @@
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
     "typescript": "latest"
   }
 }
