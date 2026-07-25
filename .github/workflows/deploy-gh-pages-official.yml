@@ -1,0 +1,57 @@
+name: Deploy ColorVerse Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/deploy-gh-pages-official.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout published branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: site
+
+      - name: Verify published assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f site/index.html
+          test -f site/public/brand/colorverse-logo-full.webp
+          test -f site/public/marketing/hero-story-page.webp
+          test -f site/public/marketing/hero-coloring-page.webp
+          test -f site/public/marketing/cover-space.webp
+          test -f site/public/marketing/cover-princess.webp
+          test -f site/public/marketing/cover-jungle.webp
+          test -f site/public/marketing/cover-hero.webp
+          test -f site/public/marketing/cover-unicorn.webp
+          touch site/.nojekyll
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
