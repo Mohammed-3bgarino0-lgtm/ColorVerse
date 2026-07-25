@@ -1,0 +1,82 @@
+name: Integrate ColorVerse PDF Template
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/integrate-pdf-template.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout published branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          fetch-depth: 0
+
+      - name: Connect PDF template to creator
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path('create.html')
+          html = path.read_text(encoding='utf-8')
+
+          replacements = [
+              (
+                  "let photoData='';",
+                  "let photoData=localStorage.getItem('colorverse-child-photo')||'';"
+              ),
+              (
+                  "const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];",
+                  "const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];if(photoData){const preview=$('#photoPreview');if(preview)preview.innerHTML='<img src=\"'+photoData+'\" alt=\"صورة الطفل\">'}"
+              ),
+              (
+                  "photoData=String(r.result);$('#photoPreview').innerHTML='<img src=\"'+photoData+'\" alt=\"صورة الطفل\">';saveDraft()",
+                  "photoData=String(r.result);localStorage.setItem('colorverse-child-photo',photoData);$('#photoPreview').innerHTML='<img src=\"'+photoData+'\" alt=\"صورة الطفل\">';saveDraft()"
+              ),
+              (
+                  '<button class="btn btn-primary" onclick="window.print()">طباعة المعاينة</button>',
+                  '<a class="btn btn-primary" href="book-print.html" onclick="collect();localStorage.setItem(STORAGE_KEY,JSON.stringify(state));if(photoData)localStorage.setItem(\'colorverse-child-photo\',photoData)">إنشاء PDF الاحترافي</a><button class="btn btn-secondary" onclick="window.print()">طباعة المعاينة</button>'
+              ),
+              (
+                  '<a class="btn btn-primary" href="index.html">حفظ والعودة للمكتبة</a>',
+                  '<a class="btn btn-primary" href="book-print.html" onclick="collect();localStorage.setItem(STORAGE_KEY,JSON.stringify(state));if(photoData)localStorage.setItem(\'colorverse-child-photo\',photoData)">إنشاء PDF</a><a class="btn btn-secondary" href="index.html">حفظ والعودة</a>'
+              ),
+          ]
+
+          changed = False
+          for old, new in replacements:
+              if old in html:
+                  html = html.replace(old, new)
+                  changed = True
+
+          if not changed:
+              raise SystemExit('No expected creator markers were found; refusing a silent no-op.')
+
+          path.write_text(html, encoding='utf-8')
+
+      - name: Verify integration
+        run: |
+          test -f book-print.html
+          grep -q "إنشاء PDF الاحترافي" create.html
+          grep -q "colorverse-child-photo" create.html
+          grep -q "قالب الكتاب الجاهز للطباعة" book-print.html
+
+      - name: Commit published update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add create.html
+          if git diff --cached --quiet; then
+            echo "PDF integration already applied."
+            exit 0
+          fi
+          git commit -m "Connect creator to personalized PDF book template"
+          git push origin gh-pages
