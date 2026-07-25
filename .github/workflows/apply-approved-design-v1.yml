@@ -1,0 +1,46 @@
+name: Apply Approved ColorVerse Design V1
+
+on:
+  push:
+    paths:
+      - '.bootstrap/design-v1/trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply-design:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download approved design package
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --output /tmp/colorverse-design-v1.tar.xz \
+            'https://drive.usercontent.google.com/download?id=1-2VMMW4Y5AzU5oPGRO0-lEbsu5TRNROJ&export=download&confirm=t'
+          xz --test /tmp/colorverse-design-v1.tar.xz
+
+      - name: Apply design files
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar -xJf /tmp/colorverse-design-v1.tar.xz -C .
+          rm -rf .bootstrap/design-v1
+          rm -f .github/workflows/apply-approved-design-v1.yml
+
+      - name: Commit approved website design
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Apply approved ColorVerse website design and official logo'
+          git push origin HEAD:main
