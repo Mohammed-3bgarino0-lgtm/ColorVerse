@@ -1,0 +1,65 @@
+name: Deploy ColorVerse Drive Assets
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/deploy-colorverse-drive-assets.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: colorverse-pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+
+      - name: Download approved site bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 5 --retry-delay 3 \
+            'https://drive.usercontent.google.com/download?id=1EFhGJEMGSHS-aWwVwGgHdt9UWR0Qn31H&export=download&confirm=t' \
+            --output ColorVerse-Site-Bundle.zip
+          unzip -t ColorVerse-Site-Bundle.zip
+
+      - name: Prepare deploy directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf deploy
+          mkdir -p deploy
+          unzip -q ColorVerse-Site-Bundle.zip -d deploy
+
+          test -f deploy/index.html
+          test -f deploy/public/marketing/hero-story-page.webp
+          test -f deploy/public/marketing/hero-coloring-page.webp
+          test -f deploy/public/marketing/cover-space.webp
+          test -f deploy/public/marketing/cover-princess.webp
+          test -f deploy/public/marketing/cover-jungle.webp
+          test -f deploy/public/marketing/cover-hero.webp
+          test -f deploy/public/marketing/cover-unicorn.webp
+          test -f deploy/public/characters/faq-dragon.webp
+          test -f deploy/public/characters/cta-child-dragon.webp
+
+          # Preserve the first approved ColorVerse logo from the repository.
+          mkdir -p deploy/public/brand
+          cp public/brand/colorverse-logo-full.webp deploy/public/brand/colorverse-logo-full.webp
+          touch deploy/.nojekyll
+
+      - name: Deploy real theme to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./deploy
+          force_orphan: true
+          keep_files: false
+          commit_message: 'Deploy approved ColorVerse images and real theme'
