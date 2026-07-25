@@ -1,0 +1,41 @@
+name: Apply Exact AI Studio UI
+
+on:
+  push:
+    paths:
+      - '.bootstrap/exact-ui/trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply-ui:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Restore exact UI files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .bootstrap/exact-ui/part-* > /tmp/colorverse-ui.b64
+          base64 --decode /tmp/colorverse-ui.b64 > /tmp/colorverse-ui.tar.xz
+          xz --test /tmp/colorverse-ui.tar.xz
+          tar -xJf /tmp/colorverse-ui.tar.xz -C .
+          rm -rf .bootstrap/exact-ui
+          rm -f .github/workflows/apply-exact-ui.yml
+
+      - name: Commit exact Google AI Studio interface
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Restore exact Google AI Studio ColorVerse interface'
+          git push origin HEAD:main
