@@ -1,14 +1,11 @@
 import { useState } from 'react';
 import {
   ArrowLeft,
-  ArrowRight,
   BookOpen,
-  Check,
   CheckCircle2,
-  ChevronDown,
   Download,
-  Heart,
   Image as ImageIcon,
+  LogIn,
   Menu,
   Palette,
   Printer,
@@ -21,227 +18,184 @@ import {
 } from 'lucide-react';
 import { BrandLogo } from './components/brand/BrandLogo';
 
-type Language = 'ar' | 'en';
-
-const copy = {
-  ar: {
-    nav: ['الرئيسية', 'كيف يعمل', 'نماذج الكتب', 'المميزات', 'الأسعار'],
-    login: 'تسجيل الدخول',
-    start: 'اصنع كتابك الآن',
-    ai: 'مدعوم بالذكاء الاصطناعي',
-    pdf: 'ملفات PDF جاهزة للطباعة',
-    headingA: 'حوّل طفلك إلى',
-    headingB: 'بطل قصة ملوّنة',
-    sub: 'أنشئ قصة أطفال مخصصة باسم طفلك وصورته، مع رسومات ثابتة للشخصية وصفحات تلوين جاهزة للطباعة خلال دقائق.',
-    examples: 'شاهد نماذج الكتب',
-    trust: ['لغتان عربي وإنجليزي', 'دعم كامل للطباعة بأعلى جودة', 'موافقة وخصوصية كاملة للصور'],
-    storyPage: 'صفحة قصة',
-    colorPage: 'صفحة تلوين',
-    fixed: 'شخصية ثابتة 100%',
-    fixedSub: 'بين القصة والتلوين',
-    sectionTitle: 'من فكرة بسيطة إلى كتاب كامل لطفلك',
-    sectionSub: 'كل ما تحتاجه لإنشاء قصة شخصية وكتاب تلوين احترافي في تجربة سهلة وممتعة.',
-    steps: [
-      ['أدخل تفاصيل طفلك', 'الاسم والعمر والموضوع المفضل وصورة اختيارية.'],
-      ['نصنع القصة والرسومات', 'الذكاء الاصطناعي ينشئ قصة متناسقة وشخصية ثابتة.'],
-      ['حمّل الكتاب واطبعه', 'ملفات PDF للقصة والتلوين والنسخة المدمجة.'],
-    ],
-    showcase: 'نماذج كتب مصممة للأطفال',
-    showcaseSub: 'مغامرات ممتعة، أبطال ثابتون، وصفحات تلوين واضحة وجاهزة للطباعة.',
-    ctaTitle: 'جاهز لصناعة قصة لا ينساها طفلك؟',
-    ctaSub: 'ابدأ الآن وأنشئ كتابًا شخصيًا يحمل اسم طفلك ويحوّل خياله إلى مغامرة حقيقية.',
-    faq: 'أسئلة شائعة',
-  },
-  en: {
-    nav: ['Home', 'How it works', 'Book samples', 'Features', 'Pricing'],
-    login: 'Sign in',
-    start: 'Create your book',
-    ai: 'AI powered',
-    pdf: 'Print-ready PDF files',
-    headingA: 'Turn your child into',
-    headingB: 'the hero of a colorful story',
-    sub: 'Create a personalized children’s story using your child’s name and photo, with a consistent character and printable coloring pages in minutes.',
-    examples: 'View book samples',
-    trust: ['Arabic and English', 'High-quality print support', 'Consent and private images'],
-    storyPage: 'Story page',
-    colorPage: 'Coloring page',
-    fixed: '100% consistent hero',
-    fixedSub: 'Across story and coloring pages',
-    sectionTitle: 'From one idea to a complete book',
-    sectionSub: 'Everything you need to create a personal story and professional coloring book in one easy experience.',
-    steps: [
-      ['Add child details', 'Name, age, favorite theme and an optional photo.'],
-      ['We create the story', 'AI builds a consistent story and recognizable hero.'],
-      ['Download and print', 'Story, coloring and combined PDF editions.'],
-    ],
-    showcase: 'Book samples made for children',
-    showcaseSub: 'Fun adventures, consistent heroes and clean printable coloring pages.',
-    ctaTitle: 'Ready to create a story your child will remember?',
-    ctaSub: 'Start now and turn your child’s imagination into a personalized adventure.',
-    faq: 'Frequently asked questions',
-  },
-} as const;
-
-const scrollTo = (id: string) => {
+const scrollToSection = (id: string) => {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
 export default function App() {
-  const [language, setLanguage] = useState<Language>('ar');
   const [menuOpen, setMenuOpen] = useState(false);
-  const t = copy[language];
-  const rtl = language === 'ar';
-  const Arrow = rtl ? ArrowLeft : ArrowRight;
+
+  const navLinks = [
+    ['الرئيسية', 'hero'],
+    ['كيف يعمل؟', 'how-it-works'],
+    ['نماذج الكتب', 'examples'],
+    ['المميزات', 'features'],
+    ['الأسعار', 'pricing'],
+  ] as const;
+
+  const navigate = (id: string) => {
+    setMenuOpen(false);
+    scrollToSection(id);
+  };
 
   return (
-    <div dir={rtl ? 'rtl' : 'ltr'} lang={language} className="min-h-screen overflow-x-hidden bg-[var(--cv-bg)] text-[var(--cv-navy)]">
-      <header className="sticky top-0 z-50 border-b border-orange-100 bg-white/95 backdrop-blur-xl">
+    <div dir="rtl" lang="ar" className="min-h-screen overflow-x-hidden bg-white text-slate-900">
+      <header className="sticky top-0 z-50 border-b border-amber-100/80 bg-white/95 shadow-sm backdrop-blur-md">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <button
-            type="button"
-            className="grid h-11 w-11 place-items-center rounded-xl border border-slate-200 bg-white text-[var(--cv-navy)] shadow-sm lg:hidden"
-            onClick={() => setMenuOpen((value) => !value)}
-            aria-label="Menu"
-          >
-            {menuOpen ? <X size={23} /> : <Menu size={24} />}
+          <button type="button" onClick={() => navigate('hero')} className="focus:outline-none">
+            <BrandLogo />
           </button>
 
-          <BrandLogo className={rtl ? '' : 'order-first'} />
-
-          <nav className="hidden items-center gap-7 text-sm font-extrabold text-slate-600 lg:flex">
-            {t.nav.map((item, index) => (
-              <button
-                key={item}
-                type="button"
-                className="transition hover:text-[var(--cv-orange)]"
-                onClick={() => scrollTo(index === 0 ? 'hero' : index === 1 ? 'how' : index === 2 ? 'examples' : index === 3 ? 'features' : 'pricing')}
-              >
-                {item}
+          <nav className="hidden items-center gap-6 text-sm font-bold text-slate-700 2xl:flex">
+            {navLinks.map(([label, id]) => (
+              <button key={id} type="button" onClick={() => navigate(id)} className="py-2 transition-colors hover:text-amber-600">
+                {label}
               </button>
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
-              className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-black text-[var(--cv-navy)] shadow-sm"
-            >
-              {language === 'ar' ? 'English' : 'العربية'}
+          <div className="hidden items-center gap-3 2xl:flex">
+            <button type="button" className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-700 transition hover:bg-amber-50 hover:text-amber-600">
+              <LogIn className="h-4 w-4" />
+              تسجيل الدخول
             </button>
-            <button type="button" className="hidden rounded-xl px-3 py-2 text-sm font-extrabold text-slate-600 sm:block">
-              {t.login}
+            <button type="button" onClick={() => navigate('create')} className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 px-5 py-2.5 text-sm font-extrabold text-white shadow-md shadow-orange-500/20 transition hover:scale-[1.02]">
+              <Sparkles className="h-4 w-4" />
+              ابدأ كتابك
             </button>
           </div>
+
+          <button
+            type="button"
+            onClick={() => setMenuOpen((value) => !value)}
+            className="rounded-xl p-2 text-slate-700 transition hover:bg-slate-100 2xl:hidden"
+            aria-label="القائمة"
+          >
+            {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
 
         {menuOpen && (
-          <div className="border-t border-slate-100 bg-white px-4 py-4 lg:hidden">
-            <div className="mx-auto grid max-w-7xl gap-2">
-              {t.nav.map((item, index) => (
-                <button
-                  key={item}
-                  type="button"
-                  className={`rounded-xl px-4 py-3 font-extrabold hover:bg-orange-50 ${rtl ? 'text-right' : 'text-left'}`}
-                  onClick={() => {
-                    setMenuOpen(false);
-                    scrollTo(index === 0 ? 'hero' : index === 1 ? 'how' : index === 2 ? 'examples' : index === 3 ? 'features' : 'pricing');
-                  }}
-                >
-                  {item}
+          <div className="border-t border-amber-100 bg-white px-4 pb-6 pt-3 shadow-xl 2xl:hidden">
+            <nav className="mx-auto flex max-w-7xl flex-col gap-2">
+              {navLinks.map(([label, id]) => (
+                <button key={id} type="button" onClick={() => navigate(id)} className="rounded-xl px-4 py-3 text-right font-bold text-slate-800 transition hover:bg-amber-50 hover:text-amber-600">
+                  {label}
                 </button>
               ))}
-            </div>
+              <button type="button" className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-3 font-bold text-slate-700">
+                <LogIn className="h-4 w-4" /> تسجيل الدخول
+              </button>
+            </nav>
           </div>
         )}
       </header>
 
       <main>
-        <section id="hero" className="relative overflow-hidden border-b border-orange-100 bg-[var(--cv-bg)] pb-16 pt-10 lg:pb-24 lg:pt-16">
-          <div className="pointer-events-none absolute -right-24 top-8 h-72 w-72 rounded-full bg-orange-300/25 blur-3xl" />
-          <div className="pointer-events-none absolute -left-24 bottom-4 h-80 w-80 rounded-full bg-violet-300/20 blur-3xl" />
-          <div className="pointer-events-none absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(#f6c76f 1px, transparent 1px)', backgroundSize: '22px 22px' }} />
+        <section id="hero" className="relative overflow-hidden bg-gradient-to-b from-amber-50/60 via-white to-slate-50 pb-16 pt-8 2xl:py-20">
+          <div className="pointer-events-none absolute right-10 top-10 h-72 w-72 rounded-full bg-amber-300/20 blur-3xl" />
+          <div className="pointer-events-none absolute bottom-10 left-10 h-96 w-96 rounded-full bg-rose-300/20 blur-3xl" />
+          <div className="pointer-events-none absolute inset-0 opacity-40 [background-size:16px_16px] [background-image:radial-gradient(#e2e8f0_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_55%_55%_at_50%_50%,#000_70%,transparent_100%)]" />
 
-          <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-[1.04fr_.96fr] lg:px-8">
-            <div className={rtl ? 'text-right' : 'text-left'}>
-              <div className="mb-7 flex flex-wrap gap-3">
-                <span className="inline-flex items-center gap-2 rounded-full border border-orange-300 bg-orange-50 px-4 py-2 text-xs font-black text-orange-700">
-                  <Sparkles size={16} /> {t.ai}
-                </span>
-                <span className="inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-emerald-50 px-4 py-2 text-xs font-black text-emerald-700">
-                  <Printer size={16} /> {t.pdf}
-                </span>
-              </div>
+          <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 items-center gap-12 2xl:grid-cols-12">
+              <div className="space-y-6 text-right 2xl:col-span-7">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-amber-300/80 bg-amber-100/80 px-3.5 py-1.5 text-xs font-bold text-amber-900 shadow-sm">
+                    <Sparkles className="h-3.5 w-3.5 animate-pulse text-amber-600" />
+                    مدعوم بالذكاء الاصطناعي
+                  </span>
+                  <span className="inline-flex items-center gap-2 rounded-full border border-emerald-300/80 bg-emerald-100/80 px-3.5 py-1.5 text-xs font-bold text-emerald-900 shadow-sm">
+                    <Printer className="h-3.5 w-3.5 text-emerald-600" />
+                    ملفات PDF جاهزة للطباعة
+                  </span>
+                </div>
 
-              <h1 className="max-w-3xl text-4xl font-black leading-[1.22] tracking-[-0.025em] sm:text-5xl lg:text-[3.6rem]">
-                {t.headingA}
-                <span className="mx-2 inline-block bg-gradient-to-l from-[var(--cv-purple)] via-[var(--cv-red)] to-[var(--cv-orange)] bg-clip-text text-transparent">
-                  {t.headingB}
-                </span>
-              </h1>
+                <h1 className="max-w-4xl text-4xl font-black leading-[1.15] tracking-tight text-slate-900 sm:text-5xl 2xl:text-6xl">
+                  حوّل طفلك إلى <br className="hidden sm:block" />
+                  <span className="bg-gradient-to-l from-rose-500 via-orange-500 to-amber-500 bg-clip-text text-transparent">
+                    بطل قصة ملوّنة
+                  </span>
+                </h1>
 
-              <p className="mt-7 max-w-2xl text-lg font-medium leading-9 text-slate-600 sm:text-xl">{t.sub}</p>
+                <p className="max-w-2xl text-lg font-medium leading-relaxed text-slate-600 sm:text-xl">
+                  أنشئ قصة أطفال مخصصة باسم طفلك وصورته، مع رسومات ثابتة للشخصية وصفحات تلوين جاهزة للطباعة خلال دقائق.
+                </p>
 
-              <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-                <button type="button" onClick={() => scrollTo('create')} className="cv-primary-button group rounded-2xl px-8 py-4 text-lg font-black">
-                  <Sparkles size={20} />
-                  {t.start}
-                  <Arrow size={20} className="transition group-hover:-translate-x-1" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => scrollTo('examples')}
-                  className="inline-flex min-h-[52px] items-center justify-center gap-3 rounded-2xl border-2 border-slate-200 bg-white px-7 py-4 text-base font-black shadow-sm transition hover:border-sky-300 hover:bg-sky-50"
-                >
-                  <BookOpen size={20} className="text-[var(--cv-blue)]" /> {t.examples}
-                </button>
-              </div>
+                <div className="flex flex-col items-stretch gap-4 pt-2 sm:flex-row sm:items-center">
+                  <button type="button" onClick={() => navigate('create')} className="group flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-l from-rose-500 via-orange-500 to-amber-500 px-8 py-4 text-lg font-extrabold text-white shadow-lg shadow-orange-500/25 transition hover:scale-[1.02] hover:shadow-xl">
+                    <Sparkles className="h-5 w-5" />
+                    <span>اصنع كتابك الآن</span>
+                    <ArrowLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
+                  </button>
+                  <button type="button" onClick={() => navigate('examples')} className="flex items-center justify-center gap-2 rounded-2xl border-2 border-slate-200 bg-white px-7 py-4 text-base font-bold text-slate-800 shadow-sm transition hover:border-amber-300 hover:bg-amber-50/50">
+                    <BookOpen className="h-5 w-5 text-amber-500" />
+                    شاهد نماذج الكتب
+                  </button>
+                </div>
 
-              <div className="mt-8 grid gap-3 border-t border-slate-200 pt-5 sm:grid-cols-3">
-                {t.trust.map((item) => (
-                  <div key={item} className="flex items-start gap-2 rounded-xl bg-white/70 p-3 text-xs font-extrabold text-slate-600 ring-1 ring-white">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--cv-green)]" />
-                    <span>{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="relative mx-auto w-full max-w-[570px]">
-              <div className="absolute -right-3 -top-6 z-20 rounded-2xl bg-white px-4 py-3 shadow-xl ring-1 ring-orange-100 sm:-right-5">
-                <div className="flex items-center gap-3">
-                  <ShieldCheck className="h-8 w-8 text-[var(--cv-green)]" />
-                  <div>
-                    <div className="text-xs font-black">{t.fixed}</div>
-                    <div className="mt-1 text-[11px] font-bold text-orange-600">{t.fixedSub}</div>
-                  </div>
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-slate-200/60 pt-4 text-xs font-bold text-slate-500">
+                  {['لغتان (عربي / إنجليزي)', 'دعم كامل للطباعة بأعلى جودة', 'موافقة وخصوصية كاملة للصور'].map((item) => (
+                    <div key={item} className="flex items-center gap-1.5">
+                      <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-500" />
+                      <span>{item}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              <div className="rounded-[34px] bg-gradient-to-br from-pink-400 via-violet-500 to-blue-500 p-4 shadow-[0_34px_90px_rgba(21,34,76,.2)]">
-                <div className="overflow-hidden rounded-[26px] bg-white">
-                  <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-                    <span className="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-black">معاينة صفحة الكتاب</span>
-                    <div className="flex gap-2"><span className="h-3 w-3 rounded-full bg-emerald-400" /><span className="h-3 w-3 rounded-full bg-amber-400" /><span className="h-3 w-3 rounded-full bg-rose-400" /></div>
+              <div className="relative mx-auto w-full max-w-xl 2xl:col-span-5">
+                <div className="absolute -right-3 -top-6 z-20 flex items-center gap-3 rounded-2xl border border-amber-100 bg-white p-3.5 shadow-xl sm:-right-4">
+                  <div className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-amber-300 via-rose-400 to-violet-500 text-white shadow-md">
+                    <ShieldCheck className="h-5 w-5" />
                   </div>
-                  <div className="grid gap-4 p-5 sm:grid-cols-2">
-                    <article className="rounded-2xl border-2 border-dashed border-sky-200 bg-sky-50 p-3">
-                      <div className="mb-3 flex items-center justify-between"><span className="text-xs font-black text-sky-700">{t.storyPage}</span><ImageIcon size={17} className="text-sky-500" /></div>
-                      <div className="grid aspect-[4/3] place-items-center rounded-xl bg-gradient-to-br from-sky-200 via-violet-200 to-orange-100">
-                        <div className="rounded-full bg-white p-5 shadow-lg"><Rocket className="h-10 w-10 text-[var(--cv-purple)]" /></div>
+                  <div className="text-right">
+                    <div className="text-xs font-black text-slate-900">شخصية ثابتة 100%</div>
+                    <div className="text-[10px] font-bold text-amber-600">بين القصة والتلوين</div>
+                  </div>
+                </div>
+
+                <div className="relative rotate-1 rounded-3xl bg-gradient-to-tr from-amber-400 via-rose-400 to-indigo-500 p-3 shadow-2xl transition-transform duration-500 hover:rotate-0 sm:p-4">
+                  <div className="space-y-4 rounded-2xl bg-white p-4 sm:p-6">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="h-3 w-3 rounded-full bg-rose-400" />
+                        <span className="h-3 w-3 rounded-full bg-amber-400" />
+                        <span className="h-3 w-3 rounded-full bg-emerald-400" />
                       </div>
-                      <div className="mt-3 h-2 rounded-full bg-slate-200" /><div className="mt-2 h-2 w-4/5 rounded-full bg-slate-100" />
-                    </article>
-                    <article className="rounded-2xl border-2 border-dashed border-orange-200 bg-orange-50 p-3">
-                      <div className="mb-3 flex items-center justify-between"><span className="text-xs font-black text-orange-700">{t.colorPage}</span><Palette size={17} className="text-orange-500" /></div>
-                      <div className="grid aspect-[4/3] place-items-center rounded-xl bg-white ring-1 ring-orange-100">
-                        <div className="relative grid h-24 w-24 place-items-center rounded-full border-[5px] border-slate-700">
-                          <Rocket className="h-10 w-10 text-slate-700" />
-                          <span className="absolute -right-3 top-1 h-3 w-3 rounded-full bg-yellow-300" />
+                      <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-800">معاينة صفحة الكتاب</span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                      <div className="space-y-2 text-right">
+                        <div className="relative flex aspect-[3/4] flex-col justify-between overflow-hidden rounded-xl border border-sky-200 bg-gradient-to-tr from-sky-400 via-indigo-300 to-amber-200 p-2 shadow-inner">
+                          <div className="flex h-full w-full flex-col items-center justify-center rounded-lg border border-white/40 bg-white/30 p-2 text-center backdrop-blur-sm">
+                            <div className="mb-2 flex h-14 w-14 items-center justify-center rounded-full border-2 border-white bg-amber-300 text-2xl shadow-md">🚀</div>
+                            <span className="text-xs font-black text-slate-900">سارة في الفضاء</span>
+                            <span className="text-[10px] font-bold text-slate-700">المشهد الملون</span>
+                          </div>
+                          <span className="absolute bottom-2 right-2 rounded-full bg-slate-900/80 px-2 py-0.5 text-[9px] font-bold text-white">صفحة 1</span>
                         </div>
+                        <p className="line-clamp-2 text-[11px] font-bold leading-snug text-slate-700">انطلقت سارة في مركبتها العجيبة نحو كوكب الألوان الضاحكة...</p>
                       </div>
-                      <div className="mt-3 flex gap-2"><span className="h-5 flex-1 rounded-full bg-rose-400" /><span className="h-5 flex-1 rounded-full bg-sky-400" /><span className="h-5 flex-1 rounded-full bg-emerald-400" /></div>
-                    </article>
+
+                      <div className="space-y-2 text-right">
+                        <div className="relative flex aspect-[3/4] flex-col justify-between overflow-hidden rounded-xl border-2 border-dashed border-slate-300 bg-white p-2 shadow-sm">
+                          <div className="flex h-full w-full flex-col items-center justify-center rounded-lg border border-slate-200 bg-slate-50 p-2 text-center">
+                            <div className="mb-2 flex h-14 w-14 items-center justify-center rounded-full border-2 border-slate-800 bg-white text-2xl grayscale shadow-sm">🖍️</div>
+                            <span className="text-xs font-black text-slate-800">لون مع سارة</span>
+                            <span className="text-[10px] font-bold text-amber-600">صفحة تلوين</span>
+                          </div>
+                          <span className="absolute bottom-2 right-2 rounded-full bg-amber-500 px-2 py-0.5 text-[9px] font-bold text-white">تلوين</span>
+                        </div>
+                        <p className="line-clamp-2 text-[11px] font-bold leading-snug text-slate-500">استخدم أقلامك الخشبية لتلوين نجمة الفضاء المحبوبة!</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between border-t border-slate-100 pt-2 text-xs font-bold text-slate-500">
+                      <span className="flex items-center gap-1 text-amber-600"><Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" /> جودة طباعة عالية</span>
+                      <span>ColorVerse</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -249,23 +203,26 @@ export default function App() {
           </div>
         </section>
 
-        <section id="how" className="bg-white py-20">
+        <section id="how-it-works" className="bg-white py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
-              <span className="inline-flex items-center gap-2 rounded-full bg-violet-50 px-4 py-2 text-xs font-black text-violet-700"><Wand2 size={16} /> ColorVerse</span>
-              <h2 className="mt-5 text-3xl font-black sm:text-4xl">{t.sectionTitle}</h2>
-              <p className="mt-4 text-lg leading-8 text-slate-600">{t.sectionSub}</p>
+              <span className="inline-flex items-center gap-2 rounded-full bg-violet-50 px-4 py-2 text-xs font-black text-violet-700"><Wand2 className="h-4 w-4" /> ColorVerse</span>
+              <h2 className="mt-5 text-3xl font-black sm:text-4xl">من فكرة بسيطة إلى كتاب كامل لطفلك</h2>
+              <p className="mt-4 text-lg leading-8 text-slate-600">كل ما تحتاجه لإنشاء قصة شخصية وكتاب تلوين احترافي في تجربة سهلة وممتعة.</p>
             </div>
             <div className="mt-12 grid gap-6 md:grid-cols-3">
-              {t.steps.map(([title, description], index) => {
-                const icons = [ImageIcon, Sparkles, Download];
-                const Icon = icons[index];
+              {[
+                [ImageIcon, 'أدخل تفاصيل طفلك', 'الاسم والعمر والموضوع المفضل وصورة اختيارية.'],
+                [Sparkles, 'نصنع القصة والرسومات', 'الذكاء الاصطناعي ينشئ قصة متناسقة وشخصية ثابتة.'],
+                [Download, 'حمّل الكتاب واطبعه', 'ملفات PDF للقصة والتلوين والنسخة المدمجة.'],
+              ].map(([Icon, title, description], index) => {
+                const StepIcon = Icon as typeof ImageIcon;
                 return (
-                  <article key={title} className="relative rounded-3xl border border-slate-200 bg-[var(--cv-bg)] p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-soft">
-                    <span className="absolute left-5 top-5 font-latin text-5xl font-black text-slate-100">0{index + 1}</span>
-                    <div className="relative grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-orange-400 to-rose-500 text-white shadow-lg"><Icon size={26} /></div>
-                    <h3 className="relative mt-6 text-xl font-black">{title}</h3>
-                    <p className="relative mt-3 leading-7 text-slate-600">{description}</p>
+                  <article key={String(title)} className="relative rounded-3xl border border-slate-200 bg-amber-50/30 p-7 shadow-sm">
+                    <span className="absolute left-5 top-5 text-5xl font-black text-slate-100">0{index + 1}</span>
+                    <div className="relative grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-amber-400 to-rose-500 text-white shadow-lg"><StepIcon className="h-6 w-6" /></div>
+                    <h3 className="relative mt-6 text-xl font-black">{String(title)}</h3>
+                    <p className="relative mt-3 leading-7 text-slate-600">{String(description)}</p>
                   </article>
                 );
               })}
@@ -273,29 +230,16 @@ export default function App() {
           </div>
         </section>
 
-        <section id="examples" className="border-y border-orange-100 bg-[var(--cv-bg)] py-20">
+        <section id="examples" className="border-y border-amber-100 bg-amber-50/30 py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
-              <div>
-                <h2 className="text-3xl font-black sm:text-4xl">{t.showcase}</h2>
-                <p className="mt-3 max-w-2xl text-lg leading-8 text-slate-600">{t.showcaseSub}</p>
-              </div>
-              <button type="button" onClick={() => scrollTo('create')} className="inline-flex items-center gap-2 font-black text-[var(--cv-purple)]">{t.start}<Arrow size={18} /></button>
-            </div>
+            <h2 className="text-center text-3xl font-black sm:text-4xl">نماذج كتب مصممة للأطفال</h2>
             <div className="mt-10 grid gap-6 md:grid-cols-3">
-              {[
-                ['مغامرة الفضاء', 'from-sky-400 via-blue-500 to-violet-600', Rocket],
-                ['حديقة الحيوانات', 'from-emerald-400 via-teal-400 to-sky-500', Heart],
-                ['أميرة النجوم', 'from-orange-300 via-rose-400 to-pink-500', Star],
-              ].map(([title, gradient, Icon]) => (
-                <article key={String(title)} className="overflow-hidden rounded-3xl border border-white bg-white shadow-soft">
-                  <div className={`grid aspect-[4/3] place-items-center bg-gradient-to-br ${gradient}`}>
-                    <div className="grid h-24 w-24 place-items-center rounded-full bg-white/90 shadow-xl"><Icon className="h-12 w-12 text-[var(--cv-purple)]" /></div>
+              {['مغامرة الفضاء', 'حديقة الحيوانات', 'أميرة النجوم'].map((title, index) => (
+                <article key={title} className="overflow-hidden rounded-3xl border border-white bg-white shadow-lg">
+                  <div className={`grid aspect-[4/3] place-items-center bg-gradient-to-br ${index === 0 ? 'from-sky-400 via-blue-500 to-violet-600' : index === 1 ? 'from-emerald-400 via-teal-400 to-sky-500' : 'from-orange-300 via-rose-400 to-pink-500'}`}>
+                    <div className="grid h-24 w-24 place-items-center rounded-full bg-white/90 shadow-xl"><Rocket className="h-12 w-12 text-violet-600" /></div>
                   </div>
-                  <div className="p-6">
-                    <div className="flex items-center justify-between"><h3 className="text-xl font-black">{title}</h3><span className="rounded-full bg-orange-50 px-3 py-1 text-[11px] font-black text-orange-600">قصة + تلوين</span></div>
-                    <div className="mt-4 flex items-center gap-2 text-sm font-bold text-slate-500"><Check size={16} className="text-emerald-500" /> 10 صفحات جاهزة للطباعة</div>
-                  </div>
+                  <div className="p-6"><h3 className="text-xl font-black">{title}</h3></div>
                 </article>
               ))}
             </div>
@@ -303,57 +247,22 @@ export default function App() {
         </section>
 
         <section id="features" className="bg-white py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {[
-                [ShieldCheck, 'خصوصية وحماية', 'صور الأطفال تبقى خاصة ولا تستخدم خارج إنشاء الكتاب.'],
-                [Palette, 'صفحات تلوين واضحة', 'خطوط نظيفة ومساحات مناسبة لأعمار الأطفال.'],
-                [Printer, 'جودة طباعة عالية', 'مقاسات مناسبة للطباعة المنزلية والمطابع.'],
-                [BookOpen, 'قصة ثنائية اللغة', 'إنشاء الكتاب بالعربية أو الإنجليزية بسهولة.'],
-              ].map(([Icon, title, description]) => (
-                <article key={String(title)} className="rounded-3xl border border-slate-200 p-6">
-                  <div className="grid h-12 w-12 place-items-center rounded-2xl bg-orange-50 text-[var(--cv-orange)]"><Icon size={24} /></div>
-                  <h3 className="mt-5 text-lg font-black">{title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-slate-600">{description}</p>
-                </article>
-              ))}
-            </div>
+          <div className="mx-auto grid max-w-7xl gap-6 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
+            {[
+              [ShieldCheck, 'خصوصية وحماية'],
+              [Palette, 'صفحات تلوين واضحة'],
+              [Printer, 'جودة طباعة عالية'],
+              [BookOpen, 'قصة ثنائية اللغة'],
+            ].map(([Icon, title]) => {
+              const FeatureIcon = Icon as typeof ShieldCheck;
+              return <article key={String(title)} className="rounded-3xl border border-slate-200 p-6"><div className="grid h-12 w-12 place-items-center rounded-2xl bg-amber-50 text-amber-500"><FeatureIcon className="h-6 w-6" /></div><h3 className="mt-5 text-lg font-black">{String(title)}</h3></article>;
+            })}
           </div>
         </section>
 
-        <section id="create" className="relative overflow-hidden bg-[var(--cv-navy)] py-20 text-white">
-          <div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
-          <div className="relative mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
-            <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/20"><Sparkles size={30} className="text-[var(--cv-yellow)]" /></div>
-            <h2 className="mt-6 text-3xl font-black sm:text-5xl">{t.ctaTitle}</h2>
-            <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/75">{t.ctaSub}</p>
-            <button type="button" className="mt-8 inline-flex min-h-[58px] items-center justify-center gap-3 rounded-2xl bg-gradient-to-l from-[var(--cv-orange)] to-[var(--cv-red)] px-9 py-4 text-lg font-black shadow-2xl transition hover:-translate-y-1">
-              <Rocket size={21} /> {t.start} <Arrow size={21} />
-            </button>
-          </div>
-        </section>
-
-        <section id="pricing" className="bg-[var(--cv-bg)] py-16">
-          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-center text-3xl font-black">{t.faq}</h2>
-            <div className="mt-8 space-y-3">
-              {['هل أحتاج خبرة في التصميم؟', 'هل يمكنني الطباعة في المنزل؟', 'هل صورة الطفل محفوظة بأمان؟'].map((question) => (
-                <details key={question} className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                  <summary className="flex cursor-pointer list-none items-center justify-between font-black"><span>{question}</span><ChevronDown className="transition group-open:rotate-180" size={20} /></summary>
-                  <p className="mt-4 leading-7 text-slate-600">لا تحتاج أي خبرة. اختر البيانات الأساسية وسيجهز النظام القصة والرسومات وملفات الطباعة بصورة تلقائية.</p>
-                </details>
-              ))}
-            </div>
-          </div>
-        </section>
+        <section id="pricing" className="bg-slate-900 py-20 text-white"><div className="mx-auto max-w-4xl px-4 text-center"><h2 className="text-3xl font-black sm:text-4xl">اختر الباقة المناسبة لكتاب طفلك</h2></div></section>
+        <section id="create" className="bg-gradient-to-l from-amber-500 via-orange-500 to-rose-500 py-20 text-white"><div className="mx-auto max-w-4xl px-4 text-center"><h2 className="text-3xl font-black sm:text-4xl">جاهز لصناعة قصة لا ينساها طفلك؟</h2><button type="button" className="mt-8 rounded-2xl bg-white px-8 py-4 text-lg font-black text-slate-900 shadow-xl">ابدأ إنشاء الكتاب</button></div></section>
       </main>
-
-      <footer className="border-t border-slate-200 bg-white py-8">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 px-4 sm:px-6 md:flex-row lg:px-8">
-          <BrandLogo />
-          <p className="text-sm font-bold text-slate-500">© 2026 ColorVerse — عالم التلوين</p>
-        </div>
-      </footer>
     </div>
   );
 }
