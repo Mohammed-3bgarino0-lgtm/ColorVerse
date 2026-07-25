@@ -1,7 +1,7 @@
 {
   "name": "colorverse-kids-book-generator",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "description": "Bilingual Arabic and English AI-powered kids coloring book generator.",
   "engines": {
@@ -12,7 +12,8 @@
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
     "start": "tsx server.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit -p tsconfig.app.json",
+    "typecheck:full": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "@google/genai": "^1.28.0",
