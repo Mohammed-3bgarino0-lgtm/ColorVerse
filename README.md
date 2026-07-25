@@ -2,6 +2,12 @@
 
 ColorVerse is a bilingual Arabic and English AI-powered kids coloring book generator.
 
+## Live preview
+
+- GitHub Pages: https://mohammed-3bgarino0-lgtm.github.io/ColorVerse/
+
+The GitHub Pages preview displays the frontend interface. Server-side features such as AI generation, authentication, payments, and protected API routes require backend deployment and environment variables.
+
 ## Brand
 
 - Approved logo: colorful planet with orbiting crayons.
