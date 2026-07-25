@@ -1,0 +1,17 @@
+{
+  "id": "hero",
+  "label": "عالم الأبطال",
+  "defaultTitlePattern": "البطل {heroName} ينقذ المدينة",
+  "coverStyle": "primary",
+  "palette": ["#2563EB", "#F97316", "#EF4444", "#10204C"],
+  "backgroundImage": "/marketing/cover-hero.webp",
+  "wardrobeHint": "بدلة بطل أصلية بألوان زرقاء وبرتقالية دون شعارات معروفة",
+  "helperSuggestions": ["روبوت مرح", "طائر سريع", "صديق مخترع"],
+  "coverProps": ["مدينة", "نجمة", "أضواء حركة"],
+  "openAdventure": true,
+  "adventureExamples": [
+    "إعادة الألوان إلى المدينة",
+    "إنقاذ صديق في عالم غامض",
+    "التغلب على الخوف بشجاعة"
+  ]
+}
