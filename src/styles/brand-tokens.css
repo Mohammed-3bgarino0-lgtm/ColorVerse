@@ -1,54 +1,83 @@
 :root {
+  --font-ui-arabic: "Tajawal", "Noto Sans Arabic", "Segoe UI", Arial, sans-serif;
+  --font-ui-latin: "Inter", "Segoe UI", Arial, sans-serif;
   --cv-orange: #ff8a00;
+  --cv-orange-dark: #d96500;
   --cv-red: #ff3d5a;
   --cv-purple: #7c3aed;
   --cv-blue: #159fea;
   --cv-green: #22c978;
   --cv-yellow: #ffc928;
   --cv-navy: #15224c;
+  --cv-navy-soft: #223365;
+  --cv-text: #26324a;
+  --cv-muted: #667085;
+  --cv-background: #fffaf4;
   --cv-bg: #fffaf4;
-  --cv-white: #ffffff;
-  --cv-muted: #6b7280;
-  --cv-border: rgba(21, 34, 76, 0.12);
-  --cv-shadow: 0 18px 55px rgba(21, 34, 76, 0.12);
+  --cv-surface: #ffffff;
+  --cv-border: #e9eaf2;
+  --cv-shadow: 0 18px 55px rgba(21, 34, 76, 0.1);
   --cv-radius-sm: 12px;
   --cv-radius-md: 20px;
-  --cv-radius-lg: 32px;
-  --cv-font-en: 'Inter', system-ui, sans-serif;
-  --cv-font-ar: 'Tajawal', system-ui, sans-serif;
+  --cv-radius-lg: 28px;
 }
 
+.font-latin { font-family: var(--font-ui-latin); }
+.font-arabic { font-family: var(--font-ui-arabic); }
+.text-cv-yellow { color: var(--cv-yellow); }
+.bg-cv-navy { background-color: var(--cv-navy); }
+.bg-cv-background { background-color: var(--cv-background); }
+.border-cv { border-color: var(--cv-border); }
+.text-cv-navy { color: var(--cv-navy); }
+.text-cv-muted { color: var(--cv-muted); }
+
+.cv-word-color {
+  background: linear-gradient(90deg, var(--cv-red), var(--cv-orange) 55%, var(--cv-yellow));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.cv-word-verse {
+  background: linear-gradient(90deg, var(--cv-green), var(--cv-blue) 52%, var(--cv-purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.cv-brand-gradient { background: linear-gradient(120deg, var(--cv-orange), var(--cv-red) 40%, var(--cv-purple)); }
+.cv-brand-gradient-cool { background: linear-gradient(120deg, var(--cv-green), var(--cv-blue) 50%, var(--cv-purple)); }
+.cv-brand-card {
+  border: 1px solid rgba(233, 234, 242, 0.95);
+  border-radius: var(--cv-radius-md);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 12px 38px rgba(21, 34, 76, 0.08);
+}
 .cv-primary-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  min-height: 52px;
-  padding: 0.8rem 1.35rem;
-  border: 0;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--cv-orange), var(--cv-red));
-  color: var(--cv-white);
-  font-weight: 800;
-  box-shadow: 0 12px 28px rgba(255, 61, 90, 0.25);
+  background: linear-gradient(110deg, var(--cv-orange), #ff713f 52%, var(--cv-red) 78%, var(--cv-purple));
+  color: white;
+  box-shadow: 0 13px 28px rgba(255, 83, 74, 0.25);
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
-
-.cv-primary-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 34px rgba(255, 61, 90, 0.32);
+.cv-primary-button:hover { box-shadow: 0 17px 36px rgba(255, 83, 74, 0.34); transform: translateY(-2px); }
+.cv-focus:focus-visible { outline: 3px solid rgba(21, 159, 234, 0.38); outline-offset: 3px; }
+.cv-hero-grid {
+  background-image:
+    radial-gradient(circle at 20% 18%, rgba(255, 201, 40, 0.18), transparent 24%),
+    radial-gradient(circle at 84% 20%, rgba(124, 58, 237, 0.14), transparent 26%),
+    radial-gradient(circle at 12% 82%, rgba(34, 201, 120, 0.12), transparent 25%),
+    radial-gradient(circle at 82% 84%, rgba(21, 159, 234, 0.12), transparent 25%);
 }
-
+.cv-dots {
+  background-image: radial-gradient(rgba(255, 138, 0, 0.24) 0.8px, transparent 0.8px);
+  background-size: 18px 18px;
+}
 .cv-hero-media-mask {
-  overflow: hidden;
-  border-radius: 44% 56% 52% 48% / 48% 43% 57% 52%;
-  box-shadow: var(--cv-shadow);
-  isolation: isolate;
+  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
 }
-
 .cv-metric-number {
-  font-family: var(--cv-font-en);
+  font-family: var(--font-ui-latin);
   font-variant-numeric: tabular-nums;
-  font-weight: 900;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
 }
+[dir="ltr"] { font-family: var(--font-ui-latin); text-align: left; }
+[dir="rtl"] { font-family: var(--font-ui-arabic); }

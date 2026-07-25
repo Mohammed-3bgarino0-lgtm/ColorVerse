@@ -1,59 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "./styles/brand-tokens.css";
 
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
+html { scroll-behavior: smooth; background: var(--cv-background); }
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: var(--cv-bg);
-  color: var(--cv-navy);
-  font-family: var(--cv-font-ar);
-  -webkit-font-smoothing: antialiased;
+  background: var(--cv-background);
+  color: var(--cv-text);
+  font-family: var(--font-ui-arabic);
   text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
-
-button,
-input,
-textarea,
-select {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-img,
-svg {
-  display: block;
-  max-width: 100%;
-}
-
-[lang='en'],
-.font-latin {
-  font-family: var(--cv-font-en);
-}
-
-[lang='ar'],
-.font-arabic {
-  font-family: var(--cv-font-ar);
-}
-
-.container {
-  width: min(1180px, calc(100% - 32px));
-  margin-inline: auto;
-}
+* { box-sizing: border-box; }
+button, a, input, select, textarea { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+.font-display { font-family: var(--font-ui-arabic); }
+::selection { background: rgba(255, 201, 40, 0.38); color: var(--cv-navy); }
