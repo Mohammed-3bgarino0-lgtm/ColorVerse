@@ -1,0 +1,17 @@
+{
+  "id": "princess",
+  "label": "عالم الأميرات",
+  "defaultTitlePattern": "{heroName} وسر القصر الساحر",
+  "coverStyle": "primary",
+  "palette": ["#A855F7", "#EC4899", "#F5C451", "#10204C"],
+  "backgroundImage": "/marketing/cover-princess.webp",
+  "wardrobeHint": "ملابس ملكية أصلية ناعمة دون تقليد أي شخصية معروفة",
+  "helperSuggestions": ["طائر ملوّن", "تنين صغير", "قطة فضولية"],
+  "coverProps": ["قصر", "حديقة", "نجوم وزهور"],
+  "openAdventure": true,
+  "adventureExamples": [
+    "حل لغز داخل قصر قديم",
+    "العثور على مفتاح الحديقة السرية",
+    "مساعدة قرية فقدت ألوانها"
+  ]
+}
