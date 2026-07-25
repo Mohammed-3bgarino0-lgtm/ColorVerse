@@ -2,8 +2,8 @@ name: Apply Approved ColorVerse Design V1
 
 on:
   push:
-    paths:
-      - '.bootstrap/design-v1/trigger.txt'
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
