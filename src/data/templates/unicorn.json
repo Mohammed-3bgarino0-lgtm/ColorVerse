@@ -1,0 +1,17 @@
+{
+  "id": "unicorn",
+  "label": "عالم اليونيكورن",
+  "defaultTitlePattern": "{heroName} وقوس القزح السحري",
+  "coverStyle": "primary",
+  "palette": ["#8B5CF6", "#EC4899", "#38BDF8", "#10204C"],
+  "backgroundImage": "/marketing/cover-unicorn.webp",
+  "wardrobeHint": "ملابس خيالية أصلية بألوان بنفسجية ووردية وزرقاء",
+  "helperSuggestions": ["يونيكورن صغير", "نجمة مضيئة", "طائر ملوّن"],
+  "coverProps": ["قوس قزح", "سحب", "وادي سحري"],
+  "openAdventure": true,
+  "adventureExamples": [
+    "إعادة الألوان إلى وادي السحب",
+    "البحث عن نجمة الأمنيات",
+    "رحلة لتعلّم التعاون"
+  ]
+}
