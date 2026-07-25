@@ -1,7 +1,8 @@
+@import "./styles/brand-tokens.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "./styles/brand-tokens.css";
 
 html { scroll-behavior: smooth; background: var(--cv-background); }
 body {
