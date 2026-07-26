@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { storyApiRouter } from './src/server/story-api-router.js';
 import { storyImageApiRouter } from './src/server/story-image-api-router.js';
+import { googleDriveApiRouter } from './src/server/google-drive-api-router.js';
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
@@ -24,6 +25,7 @@ app.get('/api/health', (_request, response) => {
 
 app.use('/api/stories', storyApiRouter);
 app.use('/api/story-images', storyImageApiRouter);
+app.use('/api/drive', googleDriveApiRouter);
 
 app.post('/api/auth/google', async (request, response) => {
   const token = request.body?.token;
