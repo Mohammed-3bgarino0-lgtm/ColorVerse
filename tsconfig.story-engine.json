@@ -32,6 +32,8 @@
     "src/lib/google-drive-client.ts",
     "src/lib/google-drive-storage.ts",
     "src/server/google-drive-api-router.ts",
+    "src/lib/book-production-readiness.ts",
+    "src/server/system-readiness-api-router.ts",
     "src/lib/book-schema.ts"
   ],
   "exclude": [
