@@ -6,6 +6,7 @@ const runtimeTags = [
   '<script src="public/js/story-studio-runtime.js"></script>',
   '<script src="public/js/story-ai-client.js"></script>',
   '<script src="public/js/story-parent-review-runtime.js"></script>',
+  '<script src="public/js/story-pdf-link-runtime.js"></script>',
 ];
 
 let source = await readFile(target, 'utf8');
@@ -16,7 +17,7 @@ if (!source.includes(bodyClose)) {
 
 const missingTags = runtimeTags.filter((tag) => !source.includes(tag));
 if (!missingTags.length) {
-  console.log(`[ColorVerse] Story studio, AI client, and parent review are already connected: ${target}`);
+  console.log(`[ColorVerse] Story studio, AI client, parent review, and book link are already connected: ${target}`);
   process.exit(0);
 }
 
