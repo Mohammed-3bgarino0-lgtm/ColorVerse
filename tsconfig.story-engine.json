@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node"]
+  },
+  "include": [
+    "src/lib/story-reference-library.ts",
+    "src/lib/story-plan-builder.ts",
+    "src/lib/story-originality-guard.ts",
+    "src/lib/story-professionalizer.ts",
+    "src/lib/book-schema.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/components",
+    "src/App.tsx",
+    "src/AppApproved.tsx",
+    "server.ts"
+  ]
+}
