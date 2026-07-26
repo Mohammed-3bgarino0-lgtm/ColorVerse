@@ -1,6 +1,6 @@
 import { Router, type Request } from 'express';
 import { GeminiStoryImageProvider, StoryImageProviderError } from '../lib/story-image-provider.js';
-import { FileStoryImageStorage } from '../lib/story-image-storage.js';
+import { createStoryImageStorage } from '../lib/story-image-storage-factory.js';
 import { StoryImageJobManager } from '../lib/story-image-job-manager.js';
 import {
   parseStoryImageGenerationInput,
@@ -41,10 +41,10 @@ function takeRateLimit(request: Request): {
 }
 
 const provider = new GeminiStoryImageProvider();
-const storage = new FileStoryImageStorage();
+const storageSelection = createStoryImageStorage();
 const jobs = new StoryImageJobManager({
   provider,
-  storage,
+  storage: storageSelection.storage,
   concurrency: Number(process.env.IMAGE_JOB_CONCURRENCY || 1),
   maxAttemptsPerAsset: Number(process.env.GEMINI_IMAGE_MAX_ATTEMPTS || 2),
 });
@@ -66,7 +66,7 @@ storyImageApiRouter.get('/health', (_request, response) => {
       story: 'full-color-with-narrative',
       coloring: 'line-art-only-without-narrative-text',
     },
-    storage: 'server-filesystem',
+    storage: storageSelection.type,
   });
 });
 
