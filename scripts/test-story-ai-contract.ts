@@ -71,14 +71,38 @@ function validStory(): GeneratedStoryDocument {
   };
 }
 
+function genericStory(): GeneratedStoryDocument {
+  const story = validStory();
+  return {
+    ...story,
+    title: 'رحلة بعيدة',
+    preservedChildIdeas: ['رحلة عامة'],
+    characters: ['مسافر', 'مساعد'],
+    setting: 'مكان بعيد غير محدد.',
+    scenes: story.scenes.map((scene, index) => ({
+      ...scene,
+      storyText: `تحرك المسافر في طريق عام وواجه موقفًا جديدًا ثم تابع رحلته في المشهد ${index + 1} دون تفاصيل من فكرة الطفل.`,
+      dialogue: [],
+    })),
+  };
+}
+
 class FakeStoryProvider implements StoryProvider {
+  readonly requests: StoryProviderRequest[] = [];
+
+  constructor(private readonly retryFirst = false) {}
+
   async generate(request: StoryProviderRequest): Promise<StoryProviderResponse> {
-    const story = parseGeneratedStoryDocument(validStory(), request);
+    this.requests.push(request);
+    const candidate = this.retryFirst && this.requests.length === 1
+      ? genericStory()
+      : validStory();
+    const story = parseGeneratedStoryDocument(candidate, request);
     return {
       story,
       model: 'fake-story-model',
       modelVersion: 'test',
-      responseId: 'fake-response',
+      responseId: `fake-response-${this.requests.length}`,
     };
   }
 }
@@ -102,17 +126,31 @@ assert.throws(
   GeneratedStoryValidationError,
 );
 
-const result = await generateProfessionalStory(input, {
-  provider: new FakeStoryProvider(),
+const directProvider = new FakeStoryProvider();
+const directResult = await generateProfessionalStory(input, {
+  provider: directProvider,
   maxAttempts: 2,
   random: () => 0,
 });
 
-assert.equal(result.story.title, 'ليان والنجمة الزرقاء');
-assert.equal(result.review.accepted, true);
-assert.equal(result.attempts.length, 1);
-assert.equal(result.attempts[0]?.outcome, 'accepted');
-assert.equal(result.metadata.referenceId, null);
-assert.ok(result.review.report.preservedChildIdeasRatio >= 0.5);
+assert.equal(directResult.story.title, 'ليان والنجمة الزرقاء');
+assert.equal(directResult.review.accepted, true);
+assert.equal(directResult.attempts.length, 1);
+assert.equal(directResult.attempts[0]?.outcome, 'accepted');
+assert.equal(directResult.metadata.referenceId, null);
+assert.ok(directResult.review.report.preservedChildIdeasRatio >= 0.5);
 
-console.log('Story AI contract tests passed.');
+const retryProvider = new FakeStoryProvider(true);
+const retryResult = await generateProfessionalStory(input, {
+  provider: retryProvider,
+  maxAttempts: 2,
+  random: () => 0,
+});
+
+assert.equal(retryProvider.requests.length, 2);
+assert.equal(retryResult.attempts.length, 2);
+assert.equal(retryResult.attempts[0]?.outcome, 'originality_rejected');
+assert.equal(retryResult.attempts[1]?.outcome, 'accepted');
+assert.ok(retryProvider.requests[1]?.retryInstruction?.includes('ORIGINALITY CHECK FAILED'));
+
+console.log('Story AI contract and retry tests passed.');
