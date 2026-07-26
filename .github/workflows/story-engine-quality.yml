@@ -13,19 +13,22 @@ on:
       - 'src/server/google-drive-api-router.ts'
       - 'server.ts'
       - 'public/js/story-*.js'
-      - 'public/js/book-print-v3-runtime.js'
-      - 'public/js/book-drive-archive-runtime.js'
+      - 'public/js/book-*.js'
       - 'public/css/book-print-v3.css'
       - 'public/css/book-editions-v4.css'
+      - 'public/css/image-review.css'
       - 'create-ai-review.html'
+      - 'image-review.html'
       - 'book-print-ai-review.html'
       - 'scripts/apply-story-studio-integration.mjs'
       - 'scripts/test-story-ai-contract.ts'
       - 'scripts/test-story-image-editions.ts'
+      - 'scripts/test-story-image-regeneration.ts'
       - 'scripts/validate-story-catalog.mjs'
       - 'scripts/validate-parent-review-runtime.mjs'
       - 'scripts/validate-book-print-review.mjs'
       - 'scripts/validate-story-image-runtime.mjs'
+      - 'scripts/validate-image-review-runtime.mjs'
       - 'scripts/validate-google-drive-storage.mjs'
       - 'public/data/story-references.json'
       - '.env.example'
@@ -57,5 +60,5 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Validate story, image editions, review, PDFs, and Drive storage
+      - name: Validate story, image editions, visual review, PDFs, and Drive storage
         run: npm run quality:stories
