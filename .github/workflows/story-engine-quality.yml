@@ -8,18 +8,23 @@ on:
       - 'src/lib/story-*.ts'
       - 'src/lib/generated-story-schema.ts'
       - 'src/lib/gemini-story-provider.ts'
-      - 'src/server/story-api-router.ts'
+      - 'src/server/story-*.ts'
+      - 'server.ts'
       - 'public/js/story-*.js'
       - 'public/js/book-print-v3-runtime.js'
       - 'public/css/book-print-v3.css'
+      - 'public/css/book-editions-v4.css'
       - 'create-ai-review.html'
       - 'book-print-ai-review.html'
       - 'scripts/apply-story-studio-integration.mjs'
       - 'scripts/test-story-ai-contract.ts'
+      - 'scripts/test-story-image-editions.ts'
       - 'scripts/validate-story-catalog.mjs'
       - 'scripts/validate-parent-review-runtime.mjs'
       - 'scripts/validate-book-print-review.mjs'
+      - 'scripts/validate-story-image-runtime.mjs'
       - 'public/data/story-references.json'
+      - '.env.example'
       - 'package.json'
       - 'tsconfig.story-engine.json'
       - '.github/workflows/story-engine-quality.yml'
@@ -35,7 +40,7 @@ concurrency:
 jobs:
   quality:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -48,5 +53,5 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Validate story engine, parent review, and book PDF
+      - name: Validate story, image editions, review, and PDFs
         run: npm run quality:stories
