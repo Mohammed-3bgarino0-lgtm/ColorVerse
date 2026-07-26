@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#7437ea">
+  <meta name="robots" content="noindex,nofollow">
+  <title>مراجعة صور الكتاب | ColorVerse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="public/css/image-review.css">
+  <script src="public/js/story-image-client.js" defer></script>
+  <script src="public/js/story-image-review-runtime.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-block">
+      <a class="btn secondary" href="create-ai-review.html">← الاستوديو</a>
+      <div><strong>مراجعة صور الكتاب</strong><small id="reviewStatus">جاري تحميل الأصول…</small></div>
+    </div>
+    <div class="top-actions">
+      <a class="btn secondary disabled" id="storyBookLink" href="book-print-ai-review.html?edition=story" aria-disabled="true">نسخة القصة</a>
+      <a class="btn secondary disabled" id="coloringBookLink" href="book-print-ai-review.html?edition=coloring" aria-disabled="true">نسخة التلوين</a>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="intro">
+      <div><span class="eyebrow">مرحلة الاعتماد البصري</span><h1>راجع ثبات البطل وتطابق التلوين</h1><p>اعتمد كل صورة بعد التأكد من ملاءمتها للطفل والقصة. يمكنك إعادة توليد أصل واحد فقط دون إعادة الكتاب كاملًا.</p></div>
+      <div class="score" id="score"><b>0%</b><span>مكتمل</span></div>
+    </section>
+    <section class="summary" id="summary" aria-live="polite"></section>
+    <section class="assets" id="assets"></section>
+  </main>
+
+  <footer class="approval-bar">
+    <div><strong id="approvalTitle">المراجعة غير مكتملة</strong><small id="approvalMessage">اعتمد البطل والغلاف وكل مشهد وصفحة تلوين.</small></div>
+    <button class="btn primary" id="approveAll" type="button" disabled>اعتماد الصور وفتح PDF النهائي</button>
+  </footer>
+</body>
+</html>
