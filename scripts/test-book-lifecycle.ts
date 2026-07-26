@@ -158,11 +158,13 @@ assert.equal(fullyApproved.coloringFinalReady, true);
 assert.equal(fullyApproved.driveArchiveReady, true);
 assert.deepEqual(fullyApproved.blockers, []);
 
+const fourthScene = images.scenes['4'];
+assert.ok(fourthScene, 'The fourth scene pair must exist.');
 const missingColoring = {
   ...images.scenes,
   '4': {
-    ...images.scenes['4'],
-    coloring: { ...images.scenes['4'].coloring, productionReady: false },
+    ...fourthScene,
+    coloring: { ...fourthScene.coloring, productionReady: false },
   },
 };
 const incomplete = evaluateBookProductionReadiness({
