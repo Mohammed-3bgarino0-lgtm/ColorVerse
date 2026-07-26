@@ -65,6 +65,31 @@
     }
   }
 
+  async function runSmokeTest() {
+    const button = $('#smokeTestBtn');
+    const result = $('#smokeResult');
+    button.disabled = true;
+    button.textContent = 'جارٍ الاختبار…';
+    result.innerHTML = '';
+    try {
+      const response = await fetch('/api/system/smoke-test', {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        credentials: 'same-origin',
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || 'تعذر تشغيل الاختبار الآمن.');
+      result.innerHTML = `<div class="drive-list">${(data.steps || []).map((step) => `
+        <div class="drive-item ${step.passed ? 'good' : ''}"><span>${esc(step.label)}</span><b>${step.passed ? 'ناجح ✓' : 'فشل'}</b><small>${esc(step.detail)}</small></div>
+      `).join('')}</div><div class="${data.ok ? 'success' : 'error'}">${data.passed}/${data.total} خطوات ناجحة — لا استهلاك Gemini ولا كتابة على Drive.</div>`;
+    } catch (error) {
+      result.innerHTML = `<div class="error">${esc(error.message || error)}</div>`;
+    } finally {
+      button.disabled = false;
+      button.textContent = 'تشغيل الاختبار الآمن';
+    }
+  }
+
   async function verifyDrive() {
     const button = $('#verifyDriveBtn');
     const result = $('#driveResult');
@@ -91,6 +116,7 @@
   }
 
   $('#refreshBtn')?.addEventListener('click', load);
+  $('#smokeTestBtn')?.addEventListener('click', runSmokeTest);
   $('#verifyDriveBtn')?.addEventListener('click', verifyDrive);
   load();
 })();
