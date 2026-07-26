@@ -13,7 +13,9 @@
     "preview": "vite preview --host 0.0.0.0",
     "start": "tsx server.ts",
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
-    "typecheck:full": "tsc --noEmit -p tsconfig.json"
+    "typecheck:full": "tsc --noEmit -p tsconfig.json",
+    "validate:stories": "node scripts/validate-story-catalog.mjs",
+    "quality:stories": "npm run validate:stories && npm run typecheck:full"
   },
   "dependencies": {
     "@google/genai": "^1.28.0",
