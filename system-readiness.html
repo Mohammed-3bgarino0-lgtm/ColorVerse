@@ -28,6 +28,12 @@
     <section class="modes" id="modes" aria-live="polite"></section>
     <section class="checks" id="checks"></section>
 
+    <section class="drive-panel smoke-panel">
+      <div><h2>اختبار الرحلة الآمن</h2><p>يمر على عقود القصة ونسختي الصور وبوابات الاعتماد وفصل مجلدات Drive، دون استخدام Gemini أو رفع ملفات.</p></div>
+      <button class="btn primary" id="smokeTestBtn" type="button">تشغيل الاختبار الآمن</button>
+      <div class="drive-result" id="smokeResult" aria-live="polite"></div>
+    </section>
+
     <section class="drive-panel">
       <div><h2>تحقق مباشر من Google Drive</h2><p>ينفذ قراءة آمنة لبيانات المجلدات المعتمدة فقط، ولا يرفع أو يعدل أي ملف.</p></div>
       <button class="btn primary" id="verifyDriveBtn" type="button">فحص مجلدات Drive</button>
@@ -37,6 +43,7 @@
     <section class="next-actions">
       <h2>مسار أول تجربة حقيقية</h2>
       <ol>
+        <li>تشغيل الاختبار الآمن والتأكد أن جميع العقود ناجحة.</li>
         <li>ضبط مفتاح Gemini في بيئة الخادم.</li>
         <li>ضبط حساب خدمة Google Drive ومشاركة المجلد معه كمحرر.</li>
         <li>فحص هذه اللوحة حتى تصبح القصص والصور وDrive جاهزة.</li>
