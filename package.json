@@ -16,7 +16,8 @@
     "typecheck:full": "tsc --noEmit -p tsconfig.json",
     "typecheck:stories": "tsc --noEmit -p tsconfig.story-engine.json",
     "validate:stories": "node scripts/validate-story-catalog.mjs",
-    "quality:stories": "npm run validate:stories && npm run typecheck:stories"
+    "test:story-ai": "tsx scripts/test-story-ai-contract.ts",
+    "quality:stories": "npm run validate:stories && npm run typecheck:stories && npm run test:story-ai"
   },
   "dependencies": {
     "@google/genai": "^1.28.0",
