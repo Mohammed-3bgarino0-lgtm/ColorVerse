@@ -11,6 +11,10 @@
     try { return JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}') || {}; } catch { return {}; }
   }
 
+  function visualApprovalValid(value) {
+    return value.imageReview?.approved === true && Boolean(value.imageReview?.approvedAt);
+  }
+
   function safeFilePart(value, fallback) {
     return clean(value || fallback)
       .normalize('NFKC')
@@ -59,10 +63,14 @@
     const archiveButton = $('#driveArchiveBtn');
     const finalButton = $('#finalPdfBtn');
     if (!archiveButton || !finalButton) return;
-    archiveButton.disabled = finalButton.disabled;
-    archiveButton.title = finalButton.disabled
-      ? 'يجب اكتمال الأصول الإنتاجية قبل الحفظ في Drive.'
-      : 'يحفظ PDF النهائي في مجلد ColorVerse المخصص.';
+    const value = draft();
+    const visuallyApproved = visualApprovalValid(value);
+    archiveButton.disabled = finalButton.disabled || !visuallyApproved;
+    archiveButton.title = !visuallyApproved
+      ? 'يجب اعتماد الصور في بوابة المراجعة البصرية أولًا.'
+      : finalButton.disabled
+        ? 'يجب اكتمال الأصول الإنتاجية قبل الحفظ في Drive.'
+        : 'يحفظ PDF النهائي في مجلد ColorVerse المخصص.';
   }
 
   async function pdfBlob(fileName) {
@@ -89,7 +97,7 @@
 
   async function archiveManifest(value, resolvedBookId, storedFile) {
     const payload = {
-      schemaVersion: 1,
+      schemaVersion: 2,
       bookId: resolvedBookId,
       edition,
       childName: value.childName,
@@ -98,6 +106,7 @@
       moral: value.generatedStory?.moral || value.moral,
       sceneCount: value.generatedStory?.scenes?.length || 0,
       parentReview: value.parentReview,
+      imageReview: value.imageReview,
       imageGeneration: value.imageGeneration,
       driveFile: storedFile,
       archivedAt: new Date().toISOString(),
@@ -120,6 +129,10 @@
       status.textContent = 'موافقة ولي الأمر مطلوبة.';
       return;
     }
+    if (!visualApprovalValid(value)) {
+      status.textContent = 'اعتماد الصور مطلوب قبل الحفظ.';
+      return;
+    }
 
     const resolvedBookId = bookId(value);
     const fileName = pdfFileName(value);
@@ -137,6 +150,7 @@
             'Content-Type': 'application/pdf',
             Accept: 'application/json',
             'X-ColorVerse-Parent-Approved': 'true',
+            'X-ColorVerse-Image-Approved': 'true',
           },
           body: blob,
         },
