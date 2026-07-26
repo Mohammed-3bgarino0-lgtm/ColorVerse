@@ -19,9 +19,10 @@
     "validate:story-review": "node scripts/validate-parent-review-runtime.mjs",
     "validate:book-print": "node scripts/validate-book-print-review.mjs",
     "validate:story-images": "node scripts/validate-story-image-runtime.mjs",
+    "validate:drive-storage": "node scripts/validate-google-drive-storage.mjs",
     "test:story-ai": "tsx scripts/test-story-ai-contract.ts",
     "test:story-images": "tsx scripts/test-story-image-editions.ts",
-    "quality:stories": "npm run validate:stories && npm run validate:story-review && npm run validate:book-print && npm run validate:story-images && npm run typecheck:stories && npm run test:story-ai && npm run test:story-images"
+    "quality:stories": "npm run validate:stories && npm run validate:story-review && npm run validate:book-print && npm run validate:story-images && npm run validate:drive-storage && npm run typecheck:stories && npm run test:story-ai && npm run test:story-images"
   },
   "dependencies": {
     "@google/genai": "^1.28.0",
