@@ -173,6 +173,13 @@ googleDriveApiRouter.post(
         error: 'لا يمكن أرشفة الكتاب قبل اعتماد ولي الأمر.',
       });
     }
+    if (selectedKind === 'final' && request.headers['x-colorverse-image-approved'] !== 'true') {
+      return response.status(403).json({
+        ok: false,
+        code: 'IMAGE_APPROVAL_REQUIRED',
+        error: 'لا يمكن أرشفة النسخة النهائية قبل اعتماد جميع الصور.',
+      });
+    }
 
     try {
       const fallback = `ColorVerse-${request.params.bookId}-${selectedEdition}-${selectedKind}.pdf`;
