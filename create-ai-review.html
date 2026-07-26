@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <title>مراجعة استوديو الذكاء الاصطناعي | ColorVerse</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#fffaf6;font-family:system-ui,sans-serif}.frame{width:100%;height:100%;border:0;display:block}.status{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:#fffaf6;color:#10204c;text-align:center;padding:24px}.status[hidden]{display:none}.card{max-width:560px;padding:24px;border:1px solid #e9e3f2;border-radius:24px;background:#fff;box-shadow:0 20px 60px rgba(49,31,102,.12)}.spinner{width:44px;height:44px;margin:0 auto 14px;border:4px solid #ece5f7;border-top-color:#7437ea;border-radius:50%;animation:spin .9s linear infinite}.error{color:#a12929}.card h1{font-size:22px;margin:0 0 8px}.card p{margin:0;line-height:1.8;color:#68738d}@keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+  <div class="status" id="status"><div class="card"><div class="spinner"></div><h1>تجهيز نسخة المراجعة</h1><p>يتم تحميل محرك المراجع، عميل الذكاء الاصطناعي، وشاشة مراجعة ولي الأمر.</p></div></div>
+  <iframe class="frame" id="studio" src="create.html" title="استوديو ColorVerse"></iframe>
+  <script>
+    (()=>{
+      const frame=document.querySelector('#studio');
+      const status=document.querySelector('#status');
+      const sources=['public/js/story-studio-runtime.js','public/js/story-ai-client.js','public/js/story-parent-review-runtime.js'];
+      const loadScript=(doc,src)=>new Promise((resolve,reject)=>{
+        const existing=[...doc.scripts].find(script=>script.getAttribute('src')===src);
+        if(existing){resolve();return}
+        const script=doc.createElement('script');
+        script.src=src;
+        script.onload=resolve;
+        script.onerror=()=>reject(new Error('تعذر تحميل '+src));
+        doc.body.appendChild(script);
+      });
+      frame.addEventListener('load',async()=>{
+        try{
+          const doc=frame.contentDocument;
+          if(!doc)throw new Error('تعذر الوصول إلى صفحة الاستوديو. يجب فتح الملف من خادم محلي أو من نفس النطاق.');
+          for(const source of sources)await loadScript(doc,source);
+          doc.documentElement.dataset.storyReview='enabled';
+          status.hidden=true;
+        }catch(error){
+          status.hidden=false;
+          status.querySelector('.card').innerHTML='<h1 class="error">تعذر فتح نسخة المراجعة</h1><p>'+String(error.message||error)+'</p>';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
