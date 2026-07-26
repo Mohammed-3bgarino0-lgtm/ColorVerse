@@ -6,9 +6,12 @@
   },
   "include": [
     "src/lib/story-reference-library.ts",
+    "src/lib/story-reference-catalog.ts",
+    "src/lib/story-reference-history.ts",
     "src/lib/story-plan-builder.ts",
     "src/lib/story-originality-guard.ts",
     "src/lib/story-professionalizer.ts",
+    "src/lib/story-engine.ts",
     "src/lib/book-schema.ts"
   ],
   "exclude": [
