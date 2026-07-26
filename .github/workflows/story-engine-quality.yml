@@ -9,27 +9,34 @@ on:
       - 'src/lib/generated-story-schema.ts'
       - 'src/lib/gemini-story-provider.ts'
       - 'src/lib/google-drive-*.ts'
+      - 'src/lib/book-production-readiness.ts'
       - 'src/server/story-*.ts'
       - 'src/server/google-drive-api-router.ts'
+      - 'src/server/system-readiness-api-router.ts'
       - 'server.ts'
       - 'public/js/story-*.js'
       - 'public/js/book-*.js'
+      - 'public/js/system-readiness-runtime.js'
       - 'public/css/book-print-v3.css'
       - 'public/css/book-editions-v4.css'
       - 'public/css/image-review.css'
+      - 'public/css/system-readiness.css'
       - 'create-ai-review.html'
       - 'image-review.html'
       - 'book-print-ai-review.html'
+      - 'system-readiness.html'
       - 'scripts/apply-story-studio-integration.mjs'
       - 'scripts/test-story-ai-contract.ts'
       - 'scripts/test-story-image-editions.ts'
       - 'scripts/test-story-image-regeneration.ts'
+      - 'scripts/test-book-lifecycle.ts'
       - 'scripts/validate-story-catalog.mjs'
       - 'scripts/validate-parent-review-runtime.mjs'
       - 'scripts/validate-book-print-review.mjs'
       - 'scripts/validate-story-image-runtime.mjs'
       - 'scripts/validate-image-review-runtime.mjs'
       - 'scripts/validate-google-drive-storage.mjs'
+      - 'scripts/validate-system-readiness.mjs'
       - 'public/data/story-references.json'
       - '.env.example'
       - 'package.json'
@@ -60,5 +67,5 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Validate story, image editions, visual review, PDFs, and Drive storage
+      - name: Validate full ColorVerse book lifecycle and production readiness
         run: npm run quality:stories
