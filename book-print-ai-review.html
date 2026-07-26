@@ -5,11 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#7437ea">
   <meta name="robots" content="noindex,nofollow">
-  <title>معاينة الكتاب المعتمد | ColorVerse</title>
+  <title>معاينة نسختي الكتاب | ColorVerse</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="public/css/book-print-v3.css">
+  <link rel="stylesheet" href="public/css/book-editions-v4.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
   <script src="public/js/book-print-v3-runtime.js" defer></script>
 </head>
@@ -18,13 +19,17 @@
     <div class="toolbar-group">
       <a class="btn secondary" href="create-ai-review.html">← مراجعة القصة</a>
       <div>
-        <strong>نسخة الكتاب المعتمدة</strong>
+        <strong id="editionTitle">نسخة الكتاب المعتمدة</strong>
         <small id="bookStatus">جاري فحص القصة والصور…</small>
       </div>
+      <nav class="edition-tabs" aria-label="اختيار نسخة الكتاب">
+        <a class="edition-tab" id="storyEditionTab" href="?edition=story">نسخة القصة</a>
+        <a class="edition-tab" id="coloringEditionTab" href="?edition=coloring">نسخة التلوين</a>
+      </nav>
     </div>
     <div class="toolbar-group actions">
       <button class="btn secondary" id="productionToggle" type="button">إخفاء ملاحظات الإنتاج</button>
-      <button class="btn secondary" id="printBtn" type="button">طباعة / حفظ PDF</button>
+      <button class="btn secondary" id="printBtn" type="button" disabled>طباعة النسخة</button>
       <button class="btn review" id="reviewPdfBtn" type="button">PDF للمراجعة</button>
       <button class="btn primary" id="finalPdfBtn" type="button" disabled>PDF النهائي</button>
     </div>
