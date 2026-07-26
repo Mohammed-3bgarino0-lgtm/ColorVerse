@@ -29,17 +29,18 @@ jobs:
           ref: gh-pages
           path: site
 
-      - name: Verify published experience
+      - name: Verify child-author story experience
         shell: bash
         run: |
           set -euo pipefail
           test -f site/index.html
           test -f site/create.html
-          test -f site/book-print.html
-          grep -q "إنشاء PDF الاحترافي" site/create.html
-          grep -q "قالب الكتاب الجاهز للطباعة" site/book-print.html
+          test -f site/book-print-v2.html
+          test -f site/public/data/story-references.json
+          grep -q "الطفل هو المؤلف" site/create.html
+          grep -q "اختيار ذكي" site/create.html
+          grep -q "فكرة وتأليف" site/book-print-v2.html
           test -f site/public/brand/colorverse-logo-full.webp
-          test -f site/public/brand/colorverse-planet-icon.webp
           test -f site/public/marketing/hero-story-page.webp
           test -f site/public/marketing/hero-coloring-page.webp
           test -f site/public/marketing/cover-space.webp
