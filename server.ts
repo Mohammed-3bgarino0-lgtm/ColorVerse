@@ -6,6 +6,7 @@ import { storyImageApiRouter } from './src/server/story-image-api-router.js';
 import { storyImageReviewApiRouter } from './src/server/story-image-review-api-router.js';
 import { googleDriveApiRouter } from './src/server/google-drive-api-router.js';
 import { systemReadinessApiRouter } from './src/server/system-readiness-api-router.js';
+import { driveWriteTrialGuard, liveAiTrialGuard } from './src/server/trial-mode-guard.js';
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
@@ -24,6 +25,13 @@ app.use('/generated-assets', express.static(generatedAssetDirectory, {
 app.get('/api/health', (_request, response) => {
   response.json({ ok: true, service: 'colorverse', timestamp: new Date().toISOString() });
 });
+
+// Trial mode is safe by default: reads and demo data remain available, while
+// paid AI requests and Drive writes stay blocked until explicitly enabled.
+app.use('/api/stories/generate', liveAiTrialGuard);
+app.use('/api/story-images/jobs', liveAiTrialGuard);
+app.use('/api/story-images/regenerate', liveAiTrialGuard);
+app.use('/api/drive/books', driveWriteTrialGuard);
 
 app.use('/api/stories', storyApiRouter);
 app.use('/api/story-images', storyImageReviewApiRouter);
