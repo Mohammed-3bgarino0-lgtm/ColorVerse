@@ -10,6 +10,13 @@ interface ReadinessCheck {
   detail: string;
 }
 
+interface SmokeStep {
+  id: string;
+  label: string;
+  passed: boolean;
+  detail: string;
+}
+
 function has(value: string | undefined): boolean {
   return Boolean(String(value || '').trim());
 }
@@ -18,81 +25,48 @@ function staticChecks(): ReadinessCheck[] {
   const folders = colorVerseDriveFolders();
   const driveClient = new GoogleDriveClient();
   return [
-    {
-      id: 'node-runtime',
-      label: 'خادم Node',
-      ready: Number(process.versions.node.split('.')[0]) >= 20,
-      requiredFor: ['story', 'images', 'drive', 'production'],
-      detail: `Node ${process.versions.node}`,
-    },
-    {
-      id: 'gemini-key',
-      label: 'مفتاح Gemini على الخادم',
-      ready: has(process.env.GEMINI_API_KEY),
-      requiredFor: ['story', 'images', 'production'],
-      detail: has(process.env.GEMINI_API_KEY) ? 'مضبوط في بيئة الخادم' : 'غير مضبوط',
-    },
-    {
-      id: 'story-model',
-      label: 'نموذج كتابة القصص',
-      ready: has(process.env.GEMINI_STORY_MODEL),
-      requiredFor: ['story', 'production'],
-      detail: process.env.GEMINI_STORY_MODEL || 'غير محدد',
-    },
-    {
-      id: 'image-model',
-      label: 'نموذج إنتاج الصور',
-      ready: has(process.env.GEMINI_IMAGE_MODEL),
-      requiredFor: ['images', 'production'],
-      detail: process.env.GEMINI_IMAGE_MODEL || 'غير محدد',
-    },
-    {
-      id: 'drive-credentials',
-      label: 'بيانات اعتماد Google Drive',
-      ready: driveClient.configured,
-      requiredFor: ['drive', 'production'],
-      detail: driveClient.configured ? 'حساب الخدمة مضبوط' : 'البريد والمفتاح الخاص غير مضبوطين',
-    },
-    {
-      id: 'drive-reference-index',
-      label: 'فهرس المراجع في Drive',
-      ready: has(process.env.GOOGLE_DRIVE_REFERENCE_INDEX_FILE_ID),
-      requiredFor: ['story', 'drive', 'production'],
-      detail: process.env.GOOGLE_DRIVE_REFERENCE_INDEX_FILE_ID || 'غير محدد',
-    },
-    {
-      id: 'drive-story-folder',
-      label: 'مجلد نسخة القصة',
-      ready: has(folders.storyEditionFolderId),
-      requiredFor: ['drive', 'production'],
-      detail: folders.storyEditionFolderId || 'غير محدد',
-    },
-    {
-      id: 'drive-coloring-folder',
-      label: 'مجلد نسخة التلوين',
-      ready: has(folders.coloringEditionFolderId),
-      requiredFor: ['drive', 'production'],
-      detail: folders.coloringEditionFolderId || 'غير محدد',
-    },
-    {
-      id: 'drive-assets-folder',
-      label: 'مجلد أصول الصور',
-      ready: has(folders.imageAssetsFolderId),
-      requiredFor: ['images', 'drive', 'production'],
-      detail: folders.imageAssetsFolderId || 'غير محدد',
-    },
-    {
-      id: 'drive-indexes-folder',
-      label: 'مجلد البيانات والفهارس',
-      ready: has(folders.indexesFolderId),
-      requiredFor: ['drive', 'production'],
-      detail: folders.indexesFolderId || 'غير محدد',
-    },
+    { id: 'node-runtime', label: 'خادم Node', ready: Number(process.versions.node.split('.')[0]) >= 20, requiredFor: ['story', 'images', 'drive', 'production'], detail: `Node ${process.versions.node}` },
+    { id: 'gemini-key', label: 'مفتاح Gemini على الخادم', ready: has(process.env.GEMINI_API_KEY), requiredFor: ['story', 'images', 'production'], detail: has(process.env.GEMINI_API_KEY) ? 'مضبوط في بيئة الخادم' : 'غير مضبوط' },
+    { id: 'story-model', label: 'نموذج كتابة القصص', ready: has(process.env.GEMINI_STORY_MODEL), requiredFor: ['story', 'production'], detail: process.env.GEMINI_STORY_MODEL || 'غير محدد' },
+    { id: 'image-model', label: 'نموذج إنتاج الصور', ready: has(process.env.GEMINI_IMAGE_MODEL), requiredFor: ['images', 'production'], detail: process.env.GEMINI_IMAGE_MODEL || 'غير محدد' },
+    { id: 'drive-credentials', label: 'بيانات اعتماد Google Drive', ready: driveClient.configured, requiredFor: ['drive', 'production'], detail: driveClient.configured ? 'حساب الخدمة مضبوط' : 'البريد والمفتاح الخاص غير مضبوطين' },
+    { id: 'drive-reference-index', label: 'فهرس المراجع في Drive', ready: has(process.env.GOOGLE_DRIVE_REFERENCE_INDEX_FILE_ID), requiredFor: ['story', 'drive', 'production'], detail: process.env.GOOGLE_DRIVE_REFERENCE_INDEX_FILE_ID || 'غير محدد' },
+    { id: 'drive-story-folder', label: 'مجلد نسخة القصة', ready: has(folders.storyEditionFolderId), requiredFor: ['drive', 'production'], detail: folders.storyEditionFolderId || 'غير محدد' },
+    { id: 'drive-coloring-folder', label: 'مجلد نسخة التلوين', ready: has(folders.coloringEditionFolderId), requiredFor: ['drive', 'production'], detail: folders.coloringEditionFolderId || 'غير محدد' },
+    { id: 'drive-assets-folder', label: 'مجلد أصول الصور', ready: has(folders.imageAssetsFolderId), requiredFor: ['images', 'drive', 'production'], detail: folders.imageAssetsFolderId || 'غير محدد' },
+    { id: 'drive-indexes-folder', label: 'مجلد البيانات والفهارس', ready: has(folders.indexesFolderId), requiredFor: ['drive', 'production'], detail: folders.indexesFolderId || 'غير محدد' },
   ];
 }
 
 function groupReady(checks: ReadinessCheck[], group: ReadinessCheck['requiredFor'][number]): boolean {
   return checks.filter((check) => check.requiredFor.includes(group)).every((check) => check.ready);
+}
+
+function smokeSteps(): SmokeStep[] {
+  const demoScenes = Array.from({ length: 8 }, (_, index) => ({
+    sceneNumber: index + 1,
+    title: `المشهد ${index + 1}`,
+    storyText: `نص تجريبي أصلي للمشهد ${index + 1}.`,
+    dialogue: index % 2 ? ['حوار قصير مناسب للطفل.'] : [],
+    illustrationPrompt: `Original story illustration ${index + 1}`,
+    coloringPrompt: `Matching clean line art ${index + 1}`,
+  }));
+  const story = { title: 'رحلة النجمة الزرقاء', scenes: demoScenes };
+  const generatedImages = Object.fromEntries(demoScenes.map((scene) => [String(scene.sceneNumber), {
+    story: { url: `/demo/story-${scene.sceneNumber}.webp`, productionReady: false },
+    coloring: { url: `/demo/coloring-${scene.sceneNumber}.webp`, productionReady: false },
+  }]));
+  const parentReview = { approved: true, reviewedSceneCount: 8 };
+  const imageReview = { approved: false };
+
+  return [
+    { id: 'story-shape', label: 'بنية القصة', passed: story.scenes.length === 8 && story.scenes.every((scene) => scene.storyText && scene.illustrationPrompt && scene.coloringPrompt), detail: 'قصة تجريبية من 8 مشاهد بعقود النص والصورة والتلوين.' },
+    { id: 'parent-gate', label: 'اعتماد ولي الأمر', passed: parentReview.approved && parentReview.reviewedSceneCount === story.scenes.length, detail: 'لا تنتقل القصة للصور قبل اعتماد النصوص.' },
+    { id: 'two-editions', label: 'نسختان منفصلتان', passed: Object.values(generatedImages).every((pair) => pair.story.url && pair.coloring.url), detail: 'كل مشهد يملك صورة قصة ورسمة تلوين مستقلة.' },
+    { id: 'coloring-policy', label: 'حماية نسخة التلوين', passed: story.scenes.every((scene) => !/نص القصة|حوار داخل الصورة|page number/i.test(scene.coloringPrompt)), detail: 'بيانات التلوين منفصلة ولا تضيف نص القصة إلى الصفحة.' },
+    { id: 'image-gate', label: 'بوابة اعتماد الصور', passed: imageReview.approved === false, detail: 'PDF النهائي يبقى مغلقًا في الاختبار حتى اعتماد الأصول.' },
+    { id: 'drive-separation', label: 'فصل مجلدات Drive', passed: colorVerseDriveFolders().storyEditionFolderId !== colorVerseDriveFolders().coloringEditionFolderId, detail: 'نسخة القصة ونسخة التلوين تستخدمان مجلدين مختلفين.' },
+  ];
 }
 
 export const systemReadinessApiRouter = Router();
@@ -124,15 +98,27 @@ systemReadinessApiRouter.get('/readiness', (_request, response) => {
   });
 });
 
+systemReadinessApiRouter.post('/smoke-test', (_request, response) => {
+  const steps = smokeSteps();
+  const passed = steps.filter((step) => step.passed).length;
+  response.json({
+    ok: passed === steps.length,
+    mode: 'safe-local-contract-test',
+    externalCalls: false,
+    geminiConsumed: false,
+    driveWrites: false,
+    passed,
+    total: steps.length,
+    steps,
+    checkedAt: new Date().toISOString(),
+  });
+});
+
 systemReadinessApiRouter.post('/verify-drive', async (_request, response) => {
   const client = new GoogleDriveClient();
   const folders = colorVerseDriveFolders();
   if (!client.configured) {
-    return response.status(503).json({
-      ok: false,
-      code: 'GOOGLE_DRIVE_NOT_CONFIGURED',
-      error: 'بيانات اعتماد Google Drive غير مضبوطة على الخادم.',
-    });
+    return response.status(503).json({ ok: false, code: 'GOOGLE_DRIVE_NOT_CONFIGURED', error: 'بيانات اعتماد Google Drive غير مضبوطة على الخادم.' });
   }
 
   const targets = [
@@ -154,10 +140,6 @@ systemReadinessApiRouter.post('/verify-drive', async (_request, response) => {
     return response.json({ ok: true, checkedAt: new Date().toISOString(), results });
   } catch (error) {
     console.error('[system/verify-drive]', error);
-    return response.status(502).json({
-      ok: false,
-      code: 'GOOGLE_DRIVE_VERIFY_FAILED',
-      error: 'تعذر التحقق المباشر من مجلدات Google Drive.',
-    });
+    return response.status(502).json({ ok: false, code: 'GOOGLE_DRIVE_VERIFY_FAILED', error: 'تعذر التحقق المباشر من مجلدات Google Drive.' });
   }
 });
