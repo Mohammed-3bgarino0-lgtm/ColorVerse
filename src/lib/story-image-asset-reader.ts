@@ -54,6 +54,14 @@ export async function readStoryImageAsset(
       }
       const fileId = asset.storagePath.slice('drive:'.length).trim();
       if (!fileId) throw new StoryImageAssetReadError('ASSET_NOT_FOUND', 'معرّف ملف Drive مفقود.');
+      const metadata = await driveClient.getFileMetadata(fileId);
+      const allowedFolderId = process.env.GOOGLE_DRIVE_IMAGE_ASSETS_FOLDER_ID || '';
+      if (!allowedFolderId || !(metadata.parents || []).includes(allowedFolderId)) {
+        throw new StoryImageAssetReadError('ASSET_NOT_ALLOWED', 'ملف Drive ليس ضمن مجلد أصول صور ColorVerse.');
+      }
+      if (!metadata.mimeType.startsWith('image/')) {
+        throw new StoryImageAssetReadError('ASSET_NOT_ALLOWED', 'الملف المحدد ليس صورة معتمدة.');
+      }
       const downloaded = await driveClient.downloadFile(fileId);
       return {
         data: downloaded.data.toString('base64'),
