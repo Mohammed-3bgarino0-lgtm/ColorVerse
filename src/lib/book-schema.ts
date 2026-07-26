@@ -81,6 +81,18 @@ export interface StoryReferenceUsage {
   forbiddenInfluence: string[];
 }
 
+export interface ParentStoryReview {
+  required: true;
+  approved: boolean;
+  approvedAt?: string;
+  reviewVersion: number;
+  reviewedSceneCount: number;
+  editedTitle: boolean;
+  editedMoral: boolean;
+  editedSceneNumbers: number[];
+  guardianName?: string;
+}
+
 export interface BookCover {
   style: CoverStyle;
   title: string;
@@ -127,6 +139,7 @@ export interface ColorVerseBook {
   referenceUsage: StoryReferenceUsage;
   storyPlan?: StoryPlan;
   originality?: OriginalityReport;
+  parentReview: ParentStoryReview;
   cover: BookCover;
   pdf: BookPdfSettings;
   pages: BookPage[];
