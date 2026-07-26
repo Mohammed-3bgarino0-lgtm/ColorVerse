@@ -21,9 +21,13 @@
     "src/lib/story-image-prompt-builder.ts",
     "src/lib/story-image-provider.ts",
     "src/lib/story-image-storage.ts",
+    "src/lib/story-image-storage-factory.ts",
     "src/lib/story-image-generation-service.ts",
     "src/lib/story-image-job-manager.ts",
     "src/server/story-image-api-router.ts",
+    "src/lib/google-drive-client.ts",
+    "src/lib/google-drive-storage.ts",
+    "src/server/google-drive-api-router.ts",
     "src/lib/book-schema.ts"
   ],
   "exclude": [
