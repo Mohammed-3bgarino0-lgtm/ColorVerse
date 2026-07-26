@@ -6,6 +6,8 @@ const runtimeTags = [
   '<script src="public/js/story-studio-runtime.js"></script>',
   '<script src="public/js/story-ai-client.js"></script>',
   '<script src="public/js/story-parent-review-runtime.js"></script>',
+  '<script src="public/js/story-image-client.js"></script>',
+  '<script src="public/js/story-image-production-runtime.js"></script>',
   '<script src="public/js/story-pdf-link-runtime.js"></script>',
 ];
 
@@ -17,7 +19,7 @@ if (!source.includes(bodyClose)) {
 
 const missingTags = runtimeTags.filter((tag) => !source.includes(tag));
 if (!missingTags.length) {
-  console.log(`[ColorVerse] Story studio, AI client, parent review, and book link are already connected: ${target}`);
+  console.log(`[ColorVerse] Story, review, two-edition images, and PDF links are already connected: ${target}`);
   process.exit(0);
 }
 
