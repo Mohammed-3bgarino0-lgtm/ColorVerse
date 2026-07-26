@@ -9,8 +9,12 @@ on:
       - 'src/lib/generated-story-schema.ts'
       - 'src/lib/gemini-story-provider.ts'
       - 'src/server/story-api-router.ts'
+      - 'public/js/story-*.js'
+      - 'create-ai-review.html'
+      - 'scripts/apply-story-studio-integration.mjs'
       - 'scripts/test-story-ai-contract.ts'
       - 'scripts/validate-story-catalog.mjs'
+      - 'scripts/validate-parent-review-runtime.mjs'
       - 'public/data/story-references.json'
       - 'package.json'
       - 'tsconfig.story-engine.json'
@@ -40,5 +44,5 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Validate story engine
+      - name: Validate story engine and parent review
         run: npm run quality:stories
