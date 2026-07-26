@@ -182,7 +182,14 @@
       }
       renderComplete();
     } catch (error) {
-      const fallback = mode() === 'auto' && ['IMAGE_PROVIDER_NOT_CONFIGURED', 'NETWORK_ERROR', 'NOT_CONFIGURED'].includes(error?.code);
+      const fallbackCodes = [
+        'IMAGE_PROVIDER_NOT_CONFIGURED',
+        'LIVE_AI_DISABLED_FOR_TRIAL',
+        'NETWORK_ERROR',
+        'NOT_CONFIGURED',
+      ];
+      const fallback = mode() === 'auto'
+        && (fallbackCodes.includes(error?.code) || [0, 404, 503].includes(Number(error?.status || 0)));
       if (fallback) {
         await runDemo();
         renderComplete();
