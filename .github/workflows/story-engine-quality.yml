@@ -8,10 +8,13 @@ on:
       - 'src/lib/story-*.ts'
       - 'src/lib/generated-story-schema.ts'
       - 'src/lib/gemini-story-provider.ts'
+      - 'src/lib/google-drive-*.ts'
       - 'src/server/story-*.ts'
+      - 'src/server/google-drive-api-router.ts'
       - 'server.ts'
       - 'public/js/story-*.js'
       - 'public/js/book-print-v3-runtime.js'
+      - 'public/js/book-drive-archive-runtime.js'
       - 'public/css/book-print-v3.css'
       - 'public/css/book-editions-v4.css'
       - 'create-ai-review.html'
@@ -23,6 +26,7 @@ on:
       - 'scripts/validate-parent-review-runtime.mjs'
       - 'scripts/validate-book-print-review.mjs'
       - 'scripts/validate-story-image-runtime.mjs'
+      - 'scripts/validate-google-drive-storage.mjs'
       - 'public/data/story-references.json'
       - '.env.example'
       - 'package.json'
@@ -53,5 +57,5 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Validate story, image editions, review, and PDFs
+      - name: Validate story, image editions, review, PDFs, and Drive storage
         run: npm run quality:stories
