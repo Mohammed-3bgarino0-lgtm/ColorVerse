@@ -9,6 +9,7 @@ export interface ColorVerseDriveFolderConfig {
   rootFolderId: string;
   referenceLibraryFolderId: string;
   referenceCatalogFileId: string;
+  referenceSemanticIndexFileId: string;
   generatedBooksRootFolderId: string;
   storyEditionFolderId: string;
   coloringEditionFolderId: string;
@@ -22,6 +23,7 @@ export function colorVerseDriveFolders(): ColorVerseDriveFolderConfig {
     rootFolderId: process.env.GOOGLE_DRIVE_ROOT_FOLDER_ID || '',
     referenceLibraryFolderId: process.env.GOOGLE_DRIVE_REFERENCE_LIBRARY_FOLDER_ID || '',
     referenceCatalogFileId: process.env.GOOGLE_DRIVE_REFERENCE_CATALOG_FILE_ID || '',
+    referenceSemanticIndexFileId: process.env.GOOGLE_DRIVE_REFERENCE_INDEX_FILE_ID || '',
     generatedBooksRootFolderId: process.env.GOOGLE_DRIVE_GENERATED_BOOKS_ROOT_ID || '',
     storyEditionFolderId: process.env.GOOGLE_DRIVE_STORY_EDITION_FOLDER_ID || '',
     coloringEditionFolderId: process.env.GOOGLE_DRIVE_COLORING_EDITION_FOLDER_ID || '',
@@ -55,6 +57,7 @@ export function isGoogleDriveStorageConfigured(
 ): boolean {
   return client.configured && Boolean(
     folders.referenceLibraryFolderId
+    && folders.referenceSemanticIndexFileId
     && folders.storyEditionFolderId
     && folders.coloringEditionFolderId
     && folders.imageAssetsFolderId
@@ -77,12 +80,13 @@ export class GoogleDriveStoryImageStorage implements StoryImageStorage {
 
   async save(input: StoreStoryImageInput): Promise<StoredStoryImageAsset> {
     if (!this.client.configured || !this.folderId) throw new GoogleDriveNotConfiguredError();
-    const scene = input.sceneNumber ? `-${String(input.sceneNumber).padStart(2, '0')}` : '';
+    const scene = input.sceneNumber ? `scene-${String(input.sceneNumber).padStart(2, '0')}` : 'book';
     const fileName = [
       safeFileSegment(input.bookId),
       safeFileSegment(input.kind),
-      `${scene}-${input.promptHash}`,
-    ].join('').replace(/--+/g, '-');
+      scene,
+      input.promptHash,
+    ].join('-').replace(/-+/g, '-');
     const uploaded = await this.client.uploadFile({
       name: `${fileName}.${extension(input.image.mimeType)}`,
       mimeType: input.image.mimeType,
@@ -156,6 +160,13 @@ export class GoogleDriveBookArchive {
   }
 
   async readReferenceCatalog<T = unknown>(): Promise<T> {
+    if (!this.client.configured || !this.folders.referenceSemanticIndexFileId) {
+      throw new GoogleDriveNotConfiguredError();
+    }
+    return this.client.readJsonFile<T>(this.folders.referenceSemanticIndexFileId);
+  }
+
+  async readReferenceSourceCatalog<T = unknown>(): Promise<T> {
     if (!this.client.configured || !this.folders.referenceCatalogFileId) {
       throw new GoogleDriveNotConfiguredError();
     }
