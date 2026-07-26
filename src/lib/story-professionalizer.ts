@@ -59,6 +59,10 @@ function referenceSection(
   ].join('\n');
 }
 
+function outputBeatType(type: StoryPlan['beats'][number]['type']): string {
+  return type === 'escalation' ? 'consequence' : type;
+}
+
 function planSection(plan: StoryPlan): string {
   return [
     `WORKING TITLE: ${plan.workingTitle}`,
@@ -68,7 +72,7 @@ function planSection(plan: StoryPlan): string {
     'APPROVED STORY BEATS:',
     ...plan.beats.map(
       (beat) =>
-        `${beat.beatNumber}. ${beat.type.toUpperCase()} | pages ${beat.targetPages.join(',')} | purpose: ${beat.purpose} | preserve: ${beat.childIdeaToPreserve ?? 'none'} | editor addition: ${beat.professionalAddition}`,
+        `${beat.beatNumber}. ${outputBeatType(beat.type).toUpperCase()} | pages ${beat.targetPages.join(',')} | purpose: ${beat.purpose} | preserve: ${beat.childIdeaToPreserve ?? 'none'} | editor addition: ${beat.professionalAddition}`,
     ),
     `ENDING REFLECTION: ${plan.endingReflection}`,
   ].join('\n');
@@ -140,6 +144,11 @@ export function buildProfessionalStoryContext(
     '- Never reproduce reference sentences, names, dialogue, locations, signature objects, or scene-by-scene progression.',
     '- When the requested topic is greed, generosity, loyalty, or friendship, use the moral arc only and invent a completely different situation and resolution.',
     '- The final setting, conflict, supporting cast, climax, and ending must differ from the reference.',
+    '',
+    'OUTPUT RULES:',
+    `- Return exactly ${input.pageCount} scenes, numbered from 1 to ${input.pageCount}.`,
+    '- beatType must be one of: opening, world, goal, inciting_event, attempt, helper, consequence, obstacle, realization, choice, climax, resolution, reflection.',
+    '- illustrationPrompt and coloringPrompt must describe the same scene and consistent characters.',
     '',
     'OUTPUT JSON ONLY:',
     '{',
