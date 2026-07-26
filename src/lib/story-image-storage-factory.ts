@@ -4,6 +4,7 @@ import {
   isGoogleDriveStorageConfigured,
 } from './google-drive-storage';
 import { GoogleDriveClient } from './google-drive-client';
+import { driveWritesEnabled } from './runtime-configuration';
 
 export interface StoryImageStorageSelection {
   storage: StoryImageStorage;
@@ -12,7 +13,7 @@ export interface StoryImageStorageSelection {
 
 export function createStoryImageStorage(): StoryImageStorageSelection {
   const client = new GoogleDriveClient();
-  if (isGoogleDriveStorageConfigured(client)) {
+  if (driveWritesEnabled() && isGoogleDriveStorageConfigured(client)) {
     return {
       storage: new GoogleDriveStoryImageStorage(client),
       type: 'google-drive',
