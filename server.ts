@@ -5,6 +5,7 @@ import { storyApiRouter } from './src/server/story-api-router.js';
 import { storyImageApiRouter } from './src/server/story-image-api-router.js';
 import { storyImageReviewApiRouter } from './src/server/story-image-review-api-router.js';
 import { googleDriveApiRouter } from './src/server/google-drive-api-router.js';
+import { systemReadinessApiRouter } from './src/server/system-readiness-api-router.js';
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
@@ -28,6 +29,7 @@ app.use('/api/stories', storyApiRouter);
 app.use('/api/story-images', storyImageReviewApiRouter);
 app.use('/api/story-images', storyImageApiRouter);
 app.use('/api/drive', googleDriveApiRouter);
+app.use('/api/system', systemReadinessApiRouter);
 
 app.post('/api/auth/google', async (request, response) => {
   const token = request.body?.token;
