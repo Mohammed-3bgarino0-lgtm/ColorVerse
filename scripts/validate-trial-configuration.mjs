@@ -43,7 +43,7 @@ for (const token of [
   'isConfiguredEnvironmentValue',
   'liveAiEnabled',
   'driveWritesEnabled',
-  'CHANGE_AFTER_TRIAL',
+  'change[_ -]?after[_ -]?trial',
 ]) {
   if (!files.runtimeConfig.includes(token)) throw new Error(`Runtime configuration protection is missing: ${token}`);
 }
