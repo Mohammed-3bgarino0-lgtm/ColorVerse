@@ -1,6 +1,7 @@
 import type { StoryPlan } from './story-plan-builder';
 import type { OriginalityReport } from './story-originality-guard';
 import type { StoryReferenceMode } from './story-reference-library';
+import type { StoredStoryImageAsset } from './story-image-contract';
 
 export const BOOK_TEMPLATE_IDS = [
   'space',
@@ -11,6 +12,7 @@ export const BOOK_TEMPLATE_IDS = [
 ] as const;
 
 export const BOOK_OUTPUT_TYPES = [
+  'separate_editions',
   'story_coloring',
   'story_only',
   'coloring_only',
@@ -31,6 +33,12 @@ export type BookStatus =
   | 'ready'
   | 'failed';
 export type BookPageType = 'story' | 'coloring' | 'opening' | 'ending';
+export type BookEditionStatus =
+  | 'not_started'
+  | 'generating'
+  | 'review_ready'
+  | 'ready'
+  | 'failed';
 
 export interface ChildProfile {
   name: string;
@@ -93,6 +101,30 @@ export interface ParentStoryReview {
   guardianName?: string;
 }
 
+export interface BookEditionState {
+  enabled: true;
+  status: BookEditionStatus;
+  narrativeText: boolean;
+  pageCount: number;
+  reviewPdfUrl?: string;
+  finalPdfUrl?: string;
+  generatedAt?: string;
+}
+
+export interface BookEditions {
+  story: BookEditionState & {
+    narrativeText: true;
+  };
+  coloring: BookEditionState & {
+    narrativeText: false;
+  };
+}
+
+export interface BookGeneratedSceneImages {
+  story: StoredStoryImageAsset;
+  coloring: StoredStoryImageAsset;
+}
+
 export interface BookCover {
   style: CoverStyle;
   title: string;
@@ -141,6 +173,10 @@ export interface ColorVerseBook {
   originality?: OriginalityReport;
   parentReview: ParentStoryReview;
   cover: BookCover;
+  editions: BookEditions;
+  generatedHero?: StoredStoryImageAsset;
+  generatedCover?: StoredStoryImageAsset;
+  generatedImages?: Record<string, BookGeneratedSceneImages>;
   pdf: BookPdfSettings;
   pages: BookPage[];
   createdAt: string;
