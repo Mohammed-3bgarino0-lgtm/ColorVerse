@@ -1,6 +1,10 @@
 import { Router } from 'express';
 import { GoogleDriveClient } from '../lib/google-drive-client.js';
 import { colorVerseDriveFolders } from '../lib/google-drive-storage.js';
+import {
+  isConfiguredEnvironmentValue,
+  runtimeConfigurationSummary,
+} from '../lib/runtime-configuration.js';
 
 interface ReadinessCheck {
   id: string;
@@ -17,24 +21,109 @@ interface SmokeStep {
   detail: string;
 }
 
-function has(value: string | undefined): boolean {
-  return Boolean(String(value || '').trim());
+function configured(value: unknown): boolean {
+  return isConfiguredEnvironmentValue(value);
 }
 
 function staticChecks(): ReadinessCheck[] {
   const folders = colorVerseDriveFolders();
-  const driveClient = new GoogleDriveClient();
+  const runtime = runtimeConfigurationSummary();
   return [
-    { id: 'node-runtime', label: 'خادم Node', ready: Number(process.versions.node.split('.')[0]) >= 20, requiredFor: ['story', 'images', 'drive', 'production'], detail: `Node ${process.versions.node}` },
-    { id: 'gemini-key', label: 'مفتاح Gemini على الخادم', ready: has(process.env.GEMINI_API_KEY), requiredFor: ['story', 'images', 'production'], detail: has(process.env.GEMINI_API_KEY) ? 'مضبوط في بيئة الخادم' : 'غير مضبوط' },
-    { id: 'story-model', label: 'نموذج كتابة القصص', ready: has(process.env.GEMINI_STORY_MODEL), requiredFor: ['story', 'production'], detail: process.env.GEMINI_STORY_MODEL || 'غير محدد' },
-    { id: 'image-model', label: 'نموذج إنتاج الصور', ready: has(process.env.GEMINI_IMAGE_MODEL), requiredFor: ['images', 'production'], detail: process.env.GEMINI_IMAGE_MODEL || 'غير محدد' },
-    { id: 'drive-credentials', label: 'بيانات اعتماد Google Drive', ready: driveClient.configured, requiredFor: ['drive', 'production'], detail: driveClient.configured ? 'حساب الخدمة مضبوط' : 'البريد والمفتاح الخاص غير مضبوطين' },
-    { id: 'drive-reference-index', label: 'فهرس المراجع في Drive', ready: has(process.env.GOOGLE_DRIVE_REFERENCE_INDEX_FILE_ID), requiredFor: ['story', 'drive', 'production'], detail: process.env.GOOGLE_DRIVE_REFERENCE_INDEX_FILE_ID || 'غير محدد' },
-    { id: 'drive-story-folder', label: 'مجلد نسخة القصة', ready: has(folders.storyEditionFolderId), requiredFor: ['drive', 'production'], detail: folders.storyEditionFolderId || 'غير محدد' },
-    { id: 'drive-coloring-folder', label: 'مجلد نسخة التلوين', ready: has(folders.coloringEditionFolderId), requiredFor: ['drive', 'production'], detail: folders.coloringEditionFolderId || 'غير محدد' },
-    { id: 'drive-assets-folder', label: 'مجلد أصول الصور', ready: has(folders.imageAssetsFolderId), requiredFor: ['images', 'drive', 'production'], detail: folders.imageAssetsFolderId || 'غير محدد' },
-    { id: 'drive-indexes-folder', label: 'مجلد البيانات والفهارس', ready: has(folders.indexesFolderId), requiredFor: ['drive', 'production'], detail: folders.indexesFolderId || 'غير محدد' },
+    {
+      id: 'node-runtime',
+      label: 'خادم Node',
+      ready: Number(process.versions.node.split('.')[0]) >= 20,
+      requiredFor: ['story', 'images', 'drive', 'production'],
+      detail: `Node ${process.versions.node}`,
+    },
+    {
+      id: 'runtime-mode',
+      label: 'وضع التشغيل',
+      ready: runtime.mode === 'production',
+      requiredFor: ['production'],
+      detail: runtime.mode === 'trial' ? 'تجريبي آمن — التكاليف والرفع مقفلان' : 'إنتاجي',
+    },
+    {
+      id: 'live-ai-switch',
+      label: 'مفتاح تشغيل الذكاء الاصطناعي',
+      ready: runtime.liveAiEnabled,
+      requiredFor: ['story', 'images', 'production'],
+      detail: runtime.liveAiEnabled
+        ? 'COLORVERSE_ENABLE_LIVE_AI=true'
+        : 'مقفل أثناء التجربة؛ غيّره إلى true بعد إضافة المفتاح الحقيقي',
+    },
+    {
+      id: 'gemini-key',
+      label: 'مفتاح Gemini على الخادم',
+      ready: runtime.geminiConfigured,
+      requiredFor: ['story', 'images', 'production'],
+      detail: runtime.geminiConfigured ? 'قيمة حقيقية مضبوطة' : 'فارغ أو قيمة تجريبية',
+    },
+    {
+      id: 'story-model',
+      label: 'نموذج كتابة القصص',
+      ready: configured(process.env.GEMINI_STORY_MODEL),
+      requiredFor: ['story', 'production'],
+      detail: process.env.GEMINI_STORY_MODEL || 'غير محدد',
+    },
+    {
+      id: 'image-model',
+      label: 'نموذج إنتاج الصور',
+      ready: configured(process.env.GEMINI_IMAGE_MODEL),
+      requiredFor: ['images', 'production'],
+      detail: process.env.GEMINI_IMAGE_MODEL || 'غير محدد',
+    },
+    {
+      id: 'drive-write-switch',
+      label: 'مفتاح الرفع إلى Drive',
+      ready: runtime.driveWritesEnabled,
+      requiredFor: ['drive', 'production'],
+      detail: runtime.driveWritesEnabled
+        ? 'COLORVERSE_ENABLE_DRIVE_WRITES=true'
+        : 'مقفل أثناء التجربة؛ القراءة والفحص فقط متاحان',
+    },
+    {
+      id: 'drive-credentials',
+      label: 'بيانات اعتماد Google Drive',
+      ready: runtime.driveCredentialsConfigured,
+      requiredFor: ['drive', 'production'],
+      detail: runtime.driveCredentialsConfigured ? 'حساب الخدمة مضبوط بقيم حقيقية' : 'فارغ أو قيم تجريبية',
+    },
+    {
+      id: 'drive-reference-index',
+      label: 'فهرس المراجع في Drive',
+      ready: configured(process.env.GOOGLE_DRIVE_REFERENCE_INDEX_FILE_ID),
+      requiredFor: ['story', 'drive', 'production'],
+      detail: process.env.GOOGLE_DRIVE_REFERENCE_INDEX_FILE_ID || 'غير محدد',
+    },
+    {
+      id: 'drive-story-folder',
+      label: 'مجلد نسخة القصة',
+      ready: configured(folders.storyEditionFolderId),
+      requiredFor: ['drive', 'production'],
+      detail: folders.storyEditionFolderId || 'غير محدد',
+    },
+    {
+      id: 'drive-coloring-folder',
+      label: 'مجلد نسخة التلوين',
+      ready: configured(folders.coloringEditionFolderId),
+      requiredFor: ['drive', 'production'],
+      detail: folders.coloringEditionFolderId || 'غير محدد',
+    },
+    {
+      id: 'drive-assets-folder',
+      label: 'مجلد أصول الصور',
+      ready: configured(folders.imageAssetsFolderId),
+      requiredFor: ['images', 'drive', 'production'],
+      detail: folders.imageAssetsFolderId || 'غير محدد',
+    },
+    {
+      id: 'drive-indexes-folder',
+      label: 'مجلد البيانات والفهارس',
+      ready: configured(folders.indexesFolderId),
+      requiredFor: ['drive', 'production'],
+      detail: folders.indexesFolderId || 'غير محدد',
+    },
   ];
 }
 
@@ -78,10 +167,12 @@ systemReadinessApiRouter.use((_request, response, next) => {
 
 systemReadinessApiRouter.get('/readiness', (_request, response) => {
   const checks = staticChecks();
+  const runtime = runtimeConfigurationSummary();
   response.json({
     ok: true,
     service: 'colorverse-system-readiness',
     checkedAt: new Date().toISOString(),
+    runtime,
     modes: {
       demo: true,
       liveStory: groupReady(checks, 'story'),
@@ -92,6 +183,7 @@ systemReadinessApiRouter.get('/readiness', (_request, response) => {
     checks,
     notes: [
       'الوضع التجريبي لا يستهلك Gemini ولا يرفع ملفات إلى Drive.',
+      'القيم CHANGE_AFTER_TRIAL وCHANGE_ME وREPLACE_ME لا تُعامل كبيانات اعتماد حقيقية.',
       'التشغيل الإنتاجي يحتاج خادم Node؛ GitHub Pages وحده لا يشغّل واجهات API.',
       'لا تُعرض المفاتيح أو بيانات الاعتماد في هذه الاستجابة.',
     ],
@@ -118,7 +210,7 @@ systemReadinessApiRouter.post('/verify-drive', async (_request, response) => {
   const client = new GoogleDriveClient();
   const folders = colorVerseDriveFolders();
   if (!client.configured) {
-    return response.status(503).json({ ok: false, code: 'GOOGLE_DRIVE_NOT_CONFIGURED', error: 'بيانات اعتماد Google Drive غير مضبوطة على الخادم.' });
+    return response.status(503).json({ ok: false, code: 'GOOGLE_DRIVE_NOT_CONFIGURED', error: 'بيانات اعتماد Google Drive غير مضبوطة بقيم حقيقية على الخادم.' });
   }
 
   const targets = [
