@@ -8,6 +8,8 @@ const paths = {
   router: 'src/server/google-drive-api-router.ts',
   server: 'server.ts',
   browser: 'public/js/book-drive-archive-runtime.js',
+  referenceBrowser: 'public/js/story-drive-reference-runtime.js',
+  reviewPage: 'create-ai-review.html',
   page: 'book-print-ai-review.html',
 };
 
@@ -16,11 +18,13 @@ const files = Object.fromEntries(await Promise.all(
 ));
 
 new Function(files.browser);
+new Function(files.referenceBrowser);
 
 const requiredEnv = [
   'GOOGLE_DRIVE_ROOT_FOLDER_ID=1YuDr40M0bUeIiscayhIfPLWvuJ8uYdlO',
   'GOOGLE_DRIVE_REFERENCE_LIBRARY_FOLDER_ID=1rTIbIYwA9JtI0Ls8q9am-pag6Ca8PfCu',
   'GOOGLE_DRIVE_REFERENCE_CATALOG_FILE_ID=1D-fWm8J_X0RETu-KgatsoAVUOOkOXLSK',
+  'GOOGLE_DRIVE_REFERENCE_INDEX_FILE_ID=1TodNnkGczZLkouYqkQV3QBpht7hfdB1S',
   'GOOGLE_DRIVE_STORY_EDITION_FOLDER_ID=107zjrQY0tgrCMUMAH8c2onaZEMMaTd_y',
   'GOOGLE_DRIVE_COLORING_EDITION_FOLDER_ID=15TQ-A6BfjiN1eKyRg2r_tWU2ltZWwYIc',
   'GOOGLE_DRIVE_IMAGE_ASSETS_FOLDER_ID=1FHD5BQAixH2cIhlsIC54uBI-aLYwy0vm',
@@ -55,6 +59,8 @@ for (const token of [
   'storyEditionFolderId',
   'coloringEditionFolderId',
   'referenceCatalogFileId',
+  'referenceSemanticIndexFileId',
+  'readReferenceCatalog',
 ]) {
   if (!files.storage.includes(token)) throw new Error(`Google Drive storage adapter is missing: ${token}`);
 }
@@ -80,6 +86,19 @@ for (const token of [
   '/manifest',
 ]) {
   if (!files.browser.includes(token)) throw new Error(`Drive archive browser runtime is missing: ${token}`);
+}
+for (const token of [
+  '/api/drive/references/catalog',
+  'Google Drive',
+  'نسخة محلية احتياطية',
+  'applyCatalog',
+]) {
+  if (!files.referenceBrowser.includes(token)) {
+    throw new Error(`Drive reference runtime is missing: ${token}`);
+  }
+}
+if (!files.reviewPage.includes('story-drive-reference-runtime.js')) {
+  throw new Error('Review studio does not load the Google Drive reference runtime.');
 }
 if (!files.page.includes('book-drive-archive-runtime.js')) {
   throw new Error('Book preview does not load the Google Drive archive runtime.');
