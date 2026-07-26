@@ -60,6 +60,23 @@ if (process.env.NODE_ENV === 'production') {
   const dist = path.join(dirname, 'dist');
   app.use(express.static(dist));
   app.get('*', (_request, response) => response.sendFile(path.join(dist, 'index.html')));
+} else {
+  app.use('/public', express.static(path.join(dirname, 'public'), {
+    fallthrough: true,
+    immutable: false,
+    maxAge: 0,
+  }));
+  const trialPages = [
+    'system-readiness.html',
+    'create.html',
+    'create-ai-review.html',
+    'image-review.html',
+    'book-print-ai-review.html',
+  ];
+  for (const page of trialPages) {
+    app.get(`/${page}`, (_request, response) => response.sendFile(path.join(dirname, page)));
+  }
+  app.get('/', (_request, response) => response.redirect('/system-readiness.html'));
 }
 
 app.listen(port, '0.0.0.0', () => {
