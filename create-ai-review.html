@@ -10,13 +10,20 @@
   </style>
 </head>
 <body>
-  <div class="status" id="status"><div class="card"><div class="spinner"></div><h1>تجهيز نسخة المراجعة</h1><p>يتم تحميل محرك المراجع، عميل الذكاء الاصطناعي، شاشة مراجعة ولي الأمر، وقالب الكتاب.</p></div></div>
+  <div class="status" id="status"><div class="card"><div class="spinner"></div><h1>تجهيز نسخة المراجعة</h1><p>يتم تحميل القصة، مراجعة ولي الأمر، ومحرك نسختي القصة والتلوين.</p></div></div>
   <iframe class="frame" id="studio" src="create.html" title="استوديو ColorVerse"></iframe>
   <script>
     (()=>{
       const frame=document.querySelector('#studio');
       const status=document.querySelector('#status');
-      const sources=['public/js/story-studio-runtime.js','public/js/story-ai-client.js','public/js/story-parent-review-runtime.js','public/js/story-pdf-link-runtime.js'];
+      const sources=[
+        'public/js/story-studio-runtime.js',
+        'public/js/story-ai-client.js',
+        'public/js/story-parent-review-runtime.js',
+        'public/js/story-image-client.js',
+        'public/js/story-image-production-runtime.js',
+        'public/js/story-pdf-link-runtime.js'
+      ];
       const loadScript=(doc,src)=>new Promise((resolve,reject)=>{
         const existing=[...doc.scripts].find(script=>script.getAttribute('src')===src);
         if(existing){resolve();return}
@@ -32,6 +39,7 @@
           if(!doc)throw new Error('تعذر الوصول إلى صفحة الاستوديو. يجب فتح الملف من خادم محلي أو من نفس النطاق.');
           for(const source of sources)await loadScript(doc,source);
           doc.documentElement.dataset.storyReview='enabled';
+          doc.documentElement.dataset.imageEditions='story-coloring';
           status.hidden=true;
         }catch(error){
           status.hidden=false;
