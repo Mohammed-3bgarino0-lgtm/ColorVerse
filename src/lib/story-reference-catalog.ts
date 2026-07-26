@@ -27,11 +27,36 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+function isInteger(value: unknown): value is number {
+  return typeof value === 'number' && Number.isInteger(value);
+}
+
+function requiredString(value: unknown, field: string): string {
+  if (typeof value !== 'string' || !value.trim()) {
+    throw new StoryCatalogError(`${field} must be a non-empty string.`);
+  }
+  return value.trim();
+}
+
 function stringArray(value: unknown, field: string): string[] {
   if (!Array.isArray(value) || value.some((item) => typeof item !== 'string')) {
     throw new StoryCatalogError(`${field} must be an array of strings.`);
   }
-  return value;
+  return value.map((item) => item.trim()).filter(Boolean);
+}
+
+function storyLanguage(value: unknown, field: string): StoryReference['language'] {
+  if (value === 'ar' || value === 'en' || value === 'bilingual') return value;
+  throw new StoryCatalogError(`${field} must be ar, en, or bilingual.`);
+}
+
+function sourceType(
+  value: unknown,
+): NonNullable<StoryReference['sourceMetadata']>['sourceType'] {
+  if (value === 'pdf' || value === 'docx' || value === 'text' || value === 'manual') {
+    return value;
+  }
+  return 'manual';
 }
 
 function parseReference(value: unknown, index: number): StoryReference {
@@ -39,29 +64,30 @@ function parseReference(value: unknown, index: number): StoryReference {
     throw new StoryCatalogError(`references[${index}] must be an object.`);
   }
 
-  const requiredStrings = ['id', 'title', 'language', 'moral', 'summary'] as const;
-  for (const field of requiredStrings) {
-    if (typeof value[field] !== 'string' || !value[field].trim()) {
-      throw new StoryCatalogError(`references[${index}].${field} is required.`);
-    }
-  }
+  const base = `references[${index}]`;
+  const id = requiredString(value.id, `${base}.id`);
+  const title = requiredString(value.title, `${base}.title`);
+  const language = storyLanguage(value.language, `${base}.language`);
+  const moral = requiredString(value.moral, `${base}.moral`);
+  const summary = requiredString(value.summary, `${base}.summary`);
 
   if (!isRecord(value.ageRange)) {
-    throw new StoryCatalogError(`references[${index}].ageRange is required.`);
+    throw new StoryCatalogError(`${base}.ageRange is required.`);
   }
 
   const min = value.ageRange.min;
   const max = value.ageRange.max;
-  if (!Number.isInteger(min) || !Number.isInteger(max) || Number(min) > Number(max)) {
-    throw new StoryCatalogError(`references[${index}].ageRange is invalid.`);
+  if (!isInteger(min) || !isInteger(max) || min > max) {
+    throw new StoryCatalogError(`${base}.ageRange is invalid.`);
   }
 
   if (!isRecord(value.styleFingerprint) || !isRecord(value.originalityRules)) {
     throw new StoryCatalogError(
-      `references[${index}] requires styleFingerprint and originalityRules.`,
+      `${base} requires styleFingerprint and originalityRules.`,
     );
   }
 
+  const style = value.styleFingerprint;
   const rules = value.originalityRules;
   for (const field of [
     'reuseText',
@@ -72,28 +98,31 @@ function parseReference(value: unknown, index: number): StoryReference {
   ]) {
     if (rules[field] !== false) {
       throw new StoryCatalogError(
-        `references[${index}].originalityRules.${field} must be false.`,
+        `${base}.originalityRules.${field} must be false.`,
       );
     }
   }
 
   return {
-    id: String(value.id),
-    title: String(value.title),
-    language: value.language as StoryReference['language'],
-    ageRange: { min: Number(min), max: Number(max) },
-    categories: stringArray(value.categories, `references[${index}].categories`),
-    topics: stringArray(value.topics, `references[${index}].topics`),
-    keywords: stringArray(value.keywords, `references[${index}].keywords`),
-    moral: String(value.moral),
-    summary: String(value.summary),
-    structure: stringArray(value.structure, `references[${index}].structure`),
+    id,
+    title,
+    language,
+    ageRange: { min, max },
+    categories: stringArray(value.categories, `${base}.categories`),
+    topics: stringArray(value.topics, `${base}.topics`),
+    keywords: stringArray(value.keywords, `${base}.keywords`),
+    moral,
+    summary,
+    structure: stringArray(value.structure, `${base}.structure`),
     styleFingerprint: {
-      narration: String(value.styleFingerprint.narration ?? ''),
-      dialogue: String(value.styleFingerprint.dialogue ?? ''),
-      pacing: String(value.styleFingerprint.pacing ?? ''),
-      illustrationRhythm: String(value.styleFingerprint.illustrationRhythm ?? ''),
-      ending: String(value.styleFingerprint.ending ?? ''),
+      narration: requiredString(style.narration, `${base}.styleFingerprint.narration`),
+      dialogue: requiredString(style.dialogue, `${base}.styleFingerprint.dialogue`),
+      pacing: requiredString(style.pacing, `${base}.styleFingerprint.pacing`),
+      illustrationRhythm: requiredString(
+        style.illustrationRhythm,
+        `${base}.styleFingerprint.illustrationRhythm`,
+      ),
+      ending: requiredString(style.ending, `${base}.styleFingerprint.ending`),
     },
     originalityRules: {
       reuseText: false,
@@ -103,16 +132,14 @@ function parseReference(value: unknown, index: number): StoryReference {
       reuseIllustrations: false,
       allowedInfluence: stringArray(
         rules.allowedInfluence,
-        `references[${index}].originalityRules.allowedInfluence`,
+        `${base}.originalityRules.allowedInfluence`,
       ),
     },
     sourceMetadata: isRecord(value.sourceMetadata)
       ? {
-          sourceType: String(
-            value.sourceMetadata.sourceType ?? 'manual',
-          ) as NonNullable<StoryReference['sourceMetadata']>['sourceType'],
-          pageCount: Number.isInteger(value.sourceMetadata.pageCount)
-            ? Number(value.sourceMetadata.pageCount)
+          sourceType: sourceType(value.sourceMetadata.sourceType),
+          pageCount: isInteger(value.sourceMetadata.pageCount)
+            ? value.sourceMetadata.pageCount
             : undefined,
           internalOnly: value.sourceMetadata.internalOnly === true,
         }
@@ -122,7 +149,7 @@ function parseReference(value: unknown, index: number): StoryReference {
 
 export function parseStoryReferenceCatalog(data: unknown): StoryReferenceCatalog {
   if (!isRecord(data)) throw new StoryCatalogError('Catalog must be an object.');
-  if (!Number.isInteger(data.version)) {
+  if (!isInteger(data.version)) {
     throw new StoryCatalogError('Catalog version must be an integer.');
   }
   if (!isRecord(data.usagePolicy)) {
@@ -139,10 +166,10 @@ export function parseStoryReferenceCatalog(data: unknown): StoryReferenceCatalog
   }
 
   return {
-    version: Number(data.version),
+    version: data.version,
     updatedAt: typeof data.updatedAt === 'string' ? data.updatedAt : undefined,
     usagePolicy: {
-      purpose: String(data.usagePolicy.purpose ?? ''),
+      purpose: requiredString(data.usagePolicy.purpose, 'usagePolicy.purpose'),
       allowed: stringArray(data.usagePolicy.allowed, 'usagePolicy.allowed'),
       forbidden: stringArray(data.usagePolicy.forbidden, 'usagePolicy.forbidden'),
     },
@@ -155,10 +182,10 @@ export function parseStoryReferenceCatalog(data: unknown): StoryReferenceCatalog
             typeof data.selection.autoReferenceStrategy === 'string'
               ? data.selection.autoReferenceStrategy
               : undefined,
-          recentReferenceHistoryLimit: Number.isInteger(
+          recentReferenceHistoryLimit: isInteger(
             data.selection.recentReferenceHistoryLimit,
           )
-            ? Number(data.selection.recentReferenceHistoryLimit)
+            ? data.selection.recentReferenceHistoryLimit
             : undefined,
         }
       : undefined,
