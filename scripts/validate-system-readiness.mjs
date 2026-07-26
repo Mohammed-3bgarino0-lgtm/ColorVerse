@@ -18,7 +18,10 @@ new Function(files.runtime);
 for (const token of [
   'جاهزية ColorVerse',
   'verifyDriveBtn',
+  'smokeTestBtn',
+  'تشغيل الاختبار الآمن',
   '/api/system/readiness',
+  '/api/system/smoke-test',
   '/api/system/verify-drive',
 ]) {
   if (!files.page.includes(token) && !files.runtime.includes(token)) {
@@ -28,7 +31,11 @@ for (const token of [
 
 for (const token of [
   "get('/readiness'",
+  "post('/smoke-test'",
   "post('/verify-drive'",
+  'externalCalls: false',
+  'geminiConsumed: false',
+  'driveWrites: false',
   'GEMINI_API_KEY',
   'GOOGLE_DRIVE_REFERENCE_INDEX_FILE_ID',
   'production',
@@ -60,4 +67,4 @@ if (!files.style.includes('.overall.good') || !files.style.includes('.mode-card.
   throw new Error('Readiness dashboard success and warning states are missing.');
 }
 
-console.log('System readiness dashboard and unified production gate validation passed.');
+console.log('System readiness dashboard, safe smoke test, and unified production gate validation passed.');
