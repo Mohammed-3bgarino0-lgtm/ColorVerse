@@ -21,10 +21,12 @@
     "validate:story-images": "node scripts/validate-story-image-runtime.mjs",
     "validate:image-review": "node scripts/validate-image-review-runtime.mjs",
     "validate:drive-storage": "node scripts/validate-google-drive-storage.mjs",
+    "validate:system-readiness": "node scripts/validate-system-readiness.mjs",
     "test:story-ai": "tsx scripts/test-story-ai-contract.ts",
     "test:story-images": "tsx scripts/test-story-image-editions.ts",
     "test:image-regeneration": "tsx scripts/test-story-image-regeneration.ts",
-    "quality:stories": "npm run validate:stories && npm run validate:story-review && npm run validate:book-print && npm run validate:story-images && npm run validate:image-review && npm run validate:drive-storage && npm run typecheck:stories && npm run test:story-ai && npm run test:story-images && npm run test:image-regeneration"
+    "test:book-lifecycle": "tsx scripts/test-book-lifecycle.ts",
+    "quality:stories": "npm run validate:stories && npm run validate:story-review && npm run validate:book-print && npm run validate:story-images && npm run validate:image-review && npm run validate:drive-storage && npm run validate:system-readiness && npm run typecheck:stories && npm run test:story-ai && npm run test:story-images && npm run test:image-regeneration && npm run test:book-lifecycle"
   },
   "dependencies": {
     "@google/genai": "^1.28.0",
