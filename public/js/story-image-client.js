@@ -72,6 +72,17 @@
     };
   }
 
+  function assetsFromState(state) {
+    if (!state.generatedHero || !state.generatedCover || !state.generatedImages) {
+      throw new ColorVerseImageJobError('أصول الصور الحالية غير مكتملة.', { code: 'IMAGE_ASSETS_MISSING' });
+    }
+    return {
+      hero: state.generatedHero,
+      cover: state.generatedCover,
+      scenes: state.generatedImages,
+    };
+  }
+
   async function request(path, options = {}) {
     const response = await fetch(endpoint(path), {
       ...options,
@@ -98,6 +109,25 @@
     return request('/api/story-images/jobs', {
       method: 'POST',
       body: JSON.stringify(payloadFromState(state)),
+    });
+  }
+
+  async function regenerate(state, target) {
+    const kind = safeText(target?.kind);
+    if (!['hero', 'cover', 'story', 'coloring'].includes(kind)) {
+      throw new ColorVerseImageJobError('نوع الصورة المطلوب غير صحيح.', { code: 'INVALID_IMAGE_TARGET' });
+    }
+    const sceneNumber = ['story', 'coloring'].includes(kind) ? Number(target?.sceneNumber) : undefined;
+    if (['story', 'coloring'].includes(kind) && !Number.isInteger(sceneNumber)) {
+      throw new ColorVerseImageJobError('رقم المشهد مطلوب.', { code: 'INVALID_SCENE_NUMBER' });
+    }
+    return request('/api/story-images/regenerate', {
+      method: 'POST',
+      body: JSON.stringify({
+        input: payloadFromState(state),
+        target: { kind, sceneNumber },
+        assets: assetsFromState(state),
+      }),
     });
   }
 
@@ -131,7 +161,9 @@
   window.ColorVerseStoryImages = Object.freeze({
     Error: ColorVerseImageJobError,
     payloadFromState,
+    assetsFromState,
     start,
+    regenerate,
     get,
     cancel,
     wait,
