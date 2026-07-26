@@ -91,7 +91,7 @@ assert.equal(coloringPrompts.length, 8);
 for (const prompt of coloringPrompts) {
   const instruction = prompt.blocks.find((block) => block.type === 'text')?.text || '';
   assert.match(instruction, /ABSOLUTELY NO story text/i);
-  assert.match(instruction, /NO.*title.*caption.*dialogue.*letters.*numbers/i);
+  assert.match(instruction, /NO[\s\S]*title[\s\S]*caption[\s\S]*dialogue[\s\S]*letters[\s\S]*numbers/i);
   assert.equal(prompt.blocks.filter((block) => block.type === 'image').length, 1);
   assert.equal(prompt.aspectRatio, '3:4');
 }
