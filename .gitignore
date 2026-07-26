@@ -8,3 +8,9 @@ dist
 coverage
 .vscode
 .idea
+generated-assets
+service-account*.json
+*service-account*.json
+*credentials*.json
+*.pem
+*.key
