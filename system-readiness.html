@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#7437ea">
+  <meta name="robots" content="noindex,nofollow">
+  <title>جاهزية النظام | ColorVerse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="public/css/system-readiness.css">
+  <script src="public/js/system-readiness-runtime.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="btn secondary" href="create-ai-review.html">← الاستوديو</a>
+    <div><strong>جاهزية ColorVerse</strong><small id="checkedAt">جاري فحص الخادم…</small></div>
+    <button class="btn secondary" id="refreshBtn" type="button">إعادة الفحص</button>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div><span class="eyebrow">قبل أول كتاب إنتاجي</span><h1>لوحة تشغيل القصص والصور والتخزين</h1><p>توضح ما يعمل الآن، وما يحتاج إعدادًا على الخادم، دون إظهار المفاتيح أو بيانات الاعتماد.</p></div>
+      <div class="overall" id="overall"><b>—</b><span>الحالة العامة</span></div>
+    </section>
+
+    <section class="modes" id="modes" aria-live="polite"></section>
+    <section class="checks" id="checks"></section>
+
+    <section class="drive-panel">
+      <div><h2>تحقق مباشر من Google Drive</h2><p>ينفذ قراءة آمنة لبيانات المجلدات المعتمدة فقط، ولا يرفع أو يعدل أي ملف.</p></div>
+      <button class="btn primary" id="verifyDriveBtn" type="button">فحص مجلدات Drive</button>
+      <div class="drive-result" id="driveResult" aria-live="polite"></div>
+    </section>
+
+    <section class="next-actions">
+      <h2>مسار أول تجربة حقيقية</h2>
+      <ol>
+        <li>ضبط مفتاح Gemini في بيئة الخادم.</li>
+        <li>ضبط حساب خدمة Google Drive ومشاركة المجلد معه كمحرر.</li>
+        <li>فحص هذه اللوحة حتى تصبح القصص والصور وDrive جاهزة.</li>
+        <li>إنشاء كتاب من 8 مشاهد ومراجعة النص والصور.</li>
+        <li>تصدير نسختي القصة والتلوين وحفظهما في Drive.</li>
+      </ol>
+    </section>
+  </main>
+</body>
+</html>
