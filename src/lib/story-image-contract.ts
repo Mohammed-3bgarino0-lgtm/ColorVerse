@@ -24,7 +24,6 @@ export interface StoryImageGenerationInput {
   heroName: string;
   template: 'space' | 'princess' | 'jungle' | 'hero' | 'unicorn';
   templateLabel: string;
-  outputIncludesColoring: boolean;
   coverStyle?: string;
   childPhotoDataUrl?: string;
   photoConsent: boolean;
@@ -48,11 +47,16 @@ export interface StoredStoryImageAsset {
 
 export interface StoryImageGenerationResult {
   bookId: string;
+  editions: {
+    story: true;
+    coloring: true;
+    coloringHasNarrativeText: false;
+  };
   hero: StoredStoryImageAsset;
   cover: StoredStoryImageAsset;
   scenes: Record<string, {
     story: StoredStoryImageAsset;
-    coloring?: StoredStoryImageAsset;
+    coloring: StoredStoryImageAsset;
   }>;
   model: string;
   demo: boolean;
@@ -172,29 +176,34 @@ export function parseStoryImageGenerationInput(value: unknown): StoryImageGenera
   const photoConsent = value.photoConsent === true;
   const childPhotoDataUrl = validatePhotoDataUrl(value.childPhotoDataUrl, photoConsent, issues);
 
+  const bookId = requiredString(value.bookId, 'bookId', issues, 4, 120);
+  const childName = requiredString(value.childName, 'childName', issues, 2, 40);
+  const heroName = requiredString(value.heroName, 'heroName', issues, 2, 40);
+  const templateLabel = requiredString(value.templateLabel, 'templateLabel', issues, 2, 100);
+  const approvedAt = requiredString(
+    isRecord(parentReview) ? parentReview.approvedAt : '',
+    'parentReview.approvedAt',
+    issues,
+    8,
+    80,
+  );
+
   if (issues.length) throw new StoryImageValidationError(issues);
 
   return {
-    bookId: requiredString(value.bookId, 'bookId', issues, 4, 120),
-    childName: requiredString(value.childName, 'childName', issues, 2, 40),
+    bookId,
+    childName,
     childAge,
-    heroName: requiredString(value.heroName, 'heroName', issues, 2, 40),
+    heroName,
     template: template as StoryImageGenerationInput['template'],
-    templateLabel: requiredString(value.templateLabel, 'templateLabel', issues, 2, 100),
-    outputIncludesColoring: value.outputIncludesColoring !== false,
+    templateLabel,
     coverStyle: clean(value.coverStyle) || undefined,
     childPhotoDataUrl,
     photoConsent,
     story: story as unknown as GeneratedStoryDocument,
     parentReview: {
       approved: true,
-      approvedAt: requiredString(
-        isRecord(parentReview) ? parentReview.approvedAt : '',
-        'parentReview.approvedAt',
-        issues,
-        8,
-        80,
-      ),
+      approvedAt,
       reviewVersion: Number(isRecord(parentReview) ? parentReview.reviewVersion : 1) || 1,
       sceneCount,
     },
