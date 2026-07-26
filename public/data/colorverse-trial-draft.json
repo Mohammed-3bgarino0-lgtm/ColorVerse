@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "bookId": "cv_trial_blue_star_001",
+  "trialData": true,
+  "childName": "طفل تجريبي",
+  "age": 8,
+  "language": "العربية",
+  "heroName": "نور",
+  "template": "space",
+  "templateTitle": "الفضاء",
+  "coverStyle": "غلاف قصصي رئيسي",
+  "pages": 8,
+  "creationMode": "child_story",
+  "childStory": "تخيل طفلًا يجد نجمة زرقاء صغيرة ضاعت من السماء، فيقرر مساعدتها على العودة إلى مكانها.",
+  "moral": "التعاون والوفاء بالوعد",
+  "generatedStory": {
+    "title": "نور والنجمة الزرقاء",
+    "credit": "فكرة وتأليف: طفل تجريبي",
+    "moral": "التعاون والوفاء بالوعد يساعداننا على تجاوز الصعوبات.",
+    "endingReflection": "ما الأداة التي كنت ستصنعها لمساعدة النجمة؟",
+    "scenes": [
+      {
+        "sceneNumber": 1,
+        "title": "ضوء عند النافذة",
+        "storyText": "في ليلة هادئة رأى نور ضوءًا أزرق يلمع قرب نافذته. اقترب فوجد نجمة صغيرة ترتجف فوق وسادة من الغبار اللامع.",
+        "dialogue": ["قال نور: لا تخافي، سأساعدك."],
+        "illustrationPrompt": "A friendly child named Noor discovers a tiny glowing blue star beside a bedroom window at night, warm original children's storybook illustration, no text.",
+        "coloringPrompt": "Matching clean black line art of Noor discovering the tiny star, large colorable areas, no text, letters, numbers, captions, or speech bubbles."
+      },
+      {
+        "sceneNumber": 2,
+        "title": "الوعد",
+        "storyText": "أخبرت النجمة نور أنها ابتعدت عن مسارها أثناء عاصفة فضائية. وعدها أن يعيدها إلى السماء قبل شروق الشمس.",
+        "dialogue": ["قالت النجمة: هل تستطيع حقًا؟", "أجاب نور: سنحاول معًا."],
+        "illustrationPrompt": "Noor listening to a tiny blue star explain its problem, gentle hopeful expressions, original storybook scene, no text.",
+        "coloringPrompt": "Matching line art of Noor listening to the blue star, clear closed outlines, no narrative text or symbols."
+      },
+      {
+        "sceneNumber": 3,
+        "title": "مركبة من الخيال",
+        "storyText": "جمع نور صندوقًا قديمًا ومروحة صغيرة ومظلة ورقية. تعاونت النجمة معه، فحوّلا الأشياء البسيطة إلى مركبة لامعة.",
+        "dialogue": ["قال نور: كل فكرة صغيرة قد تصبح حلًا كبيرًا."],
+        "illustrationPrompt": "Noor and the blue star building a whimsical homemade spacecraft from safe household objects, creative original composition, no text.",
+        "coloringPrompt": "Matching black line coloring page of the homemade spacecraft construction, simple large areas, no words or numbers."
+      },
+      {
+        "sceneNumber": 4,
+        "title": "الانطلاق",
+        "storyText": "انطلقت المركبة فوق أسطح المدينة. كان نور يقود بحذر، بينما أضاءت النجمة الطريق بين السحب البنفسجية.",
+        "dialogue": ["هتفت النجمة: إلى أعلى!"],
+        "illustrationPrompt": "Noor flying a whimsical small spacecraft above a quiet city with the blue star guiding the way, cinematic child-friendly storybook art, no text.",
+        "coloringPrompt": "Matching line art of the spacecraft above the city and clouds, no dialogue, titles, page numbers, or letters."
+      },
+      {
+        "sceneNumber": 5,
+        "title": "سحابة النيازك",
+        "storyText": "ظهرت أمامهما سحابة من الحصى الفضائي. لم يستطع نور المرور وحده، فطلب من النجمة أن ترسم له طريقًا آمنًا بضوئها.",
+        "dialogue": ["قال نور: نحتاج إلى قوتك الآن."],
+        "illustrationPrompt": "Noor and the blue star navigating a gentle meteor cloud together, teamwork and safe adventure, original illustration, no text.",
+        "coloringPrompt": "Matching child-friendly line art of the meteor-cloud navigation, thick outlines, no text or numbers."
+      },
+      {
+        "sceneNumber": 6,
+        "title": "الطريق المخفي",
+        "storyText": "كوّنت النجمة خيطًا أزرق بين الحصى، واتبع نور الضوء بثبات. اكتشفا أن التعاون جعلهما أسرع وأكثر شجاعة.",
+        "dialogue": ["قالت النجمة: أنت تقود جيدًا!", "ابتسم نور: لأننا فريق."],
+        "illustrationPrompt": "A glowing blue path through space created by the star while Noor pilots confidently, warm teamwork moment, no text.",
+        "coloringPrompt": "Matching line art of Noor following the glowing path through space, artwork only, no captions or symbols."
+      },
+      {
+        "sceneNumber": 7,
+        "title": "مكان النجمة",
+        "storyText": "وصلا إلى مجموعة النجوم قبل الفجر بقليل. عادت النجمة الزرقاء إلى مكانها، فأضاءت السماء بلون جميل لم يره نور من قبل.",
+        "dialogue": ["قالت النجمة: لقد وفيت بوعدك."],
+        "illustrationPrompt": "Noor returning the blue star to its constellation just before dawn, emotional original storybook climax, no text.",
+        "coloringPrompt": "Matching clean line art of the star returning to its constellation, no story text, dialogue, letters, or numbers."
+      },
+      {
+        "sceneNumber": 8,
+        "title": "هدية في السماء",
+        "storyText": "عاد نور إلى غرفته، وعندما نظر من النافذة رأى النجمة تومض ثلاث مرات. عرف أنها تشكره، ووضع رسم المركبة بجانب سريره ليتذكر مغامرتهما.",
+        "dialogue": ["همس نور: إلى مغامرة جديدة."],
+        "illustrationPrompt": "Noor back in his room at dawn watching the blue star twinkle outside, peaceful satisfying ending, original art, no text.",
+        "coloringPrompt": "Matching coloring line art of Noor watching the star from the window, no title, narrative, dialogue, letters, or page number."
+      }
+    ]
+  },
+  "parentReview": {
+    "approved": true,
+    "approvedAt": "2026-07-26T00:00:00.000Z",
+    "reviewVersion": 1,
+    "reviewedSceneCount": 8,
+    "sceneCount": 8,
+    "reviewerName": "ولي أمر تجريبي"
+  },
+  "generatedHero": {
+    "kind": "hero",
+    "url": "public/marketing/hero-story-page.webp",
+    "storagePath": "demo/hero/0",
+    "mimeType": "image/webp",
+    "promptHash": "trial-demo-not-production-ready",
+    "model": "local-demo",
+    "createdAt": "2026-07-26T00:00:00.000Z",
+    "productionReady": false
+  },
+  "generatedCover": {
+    "kind": "cover",
+    "url": "public/marketing/cover-space.webp",
+    "storagePath": "demo/cover/0",
+    "mimeType": "image/webp",
+    "promptHash": "trial-demo-not-production-ready",
+    "model": "local-demo",
+    "createdAt": "2026-07-26T00:00:00.000Z",
+    "productionReady": false
+  },
+  "generatedImages": {
+    "1": { "story": { "kind": "story", "sceneNumber": 1, "url": "public/marketing/hero-story-page.webp", "storagePath": "demo/story/1", "mimeType": "image/webp", "promptHash": "trial", "model": "local-demo", "createdAt": "2026-07-26T00:00:00.000Z", "productionReady": false }, "coloring": { "kind": "coloring", "sceneNumber": 1, "url": "public/marketing/hero-coloring-page.webp", "storagePath": "demo/coloring/1", "mimeType": "image/webp", "promptHash": "trial", "model": "local-demo", "createdAt": "2026-07-26T00:00:00.000Z", "productionReady": false } },
+    "2": { "story": { "kind": "story", "sceneNumber": 2, "url": "public/marketing/hero-story-page.webp", "storagePath": "demo/story/2", "mimeType": "image/webp", "promptHash": "trial", "model": "local-demo", "createdAt": "2026-07-26T00:00:00.000Z", "productionReady": false }, "coloring": { "kind": "coloring", "sceneNumber": 2, "url": "public/marketing/hero-coloring-page.webp", "storagePath": "demo/coloring/2", "mimeType": "image/webp", "promptHash": "trial", "model": "local-demo", "createdAt": "2026-07-26T00:00:00.000Z", "productionReady": false } },
+    "3": { "story": { "kind": "story", "sceneNumber": 3, "url": "public/marketing/hero-story-page.webp", "storagePath": "demo/story/3", "mimeType": "image/webp", "promptHash": "trial", "model": "local-demo", "createdAt": "2026-07-26T00:00:00.000Z", "productionReady": false }, "coloring": { "kind": "coloring", "sceneNumber": 3, "url": "public/marketing/hero-coloring-page.webp", "storagePath": "demo/coloring/3", "mimeType": "image/webp", "promptHash": "trial", "model": "local-demo", "createdAt": "2026-07-26T00:00:00.000Z", "productionReady": false } },
+    "4": { "story": { "kind": "story", "sceneNumber": 4, "url": "public/marketing/hero-story-page.webp", "storagePath": "demo/story/4", "mimeType": "image/webp", "promptHash": "trial", "model": "local-demo", "createdAt": "2026-07-26T00:00:00.000Z", "productionReady": false }, "coloring": { "kind": "coloring", "sceneNumber": 4, "url": "public/marketing/hero-coloring-page.webp", "storagePath": "demo/coloring/4", "mimeType": "image/webp", "promptHash": "trial", "model": "local-demo", "createdAt": "2026-07-26T00:00:00.000Z", "productionReady": false } },
+    "5": { "story": { "kind": "story", "sceneNumber": 5, "url": "public/marketing/hero-story-page.webp", "storagePath": "demo/story/5", "mimeType": "image/webp", "promptHash": "trial", "model": "local-demo", "createdAt": "2026-07-26T00:00:00.000Z", "productionReady": false }, "coloring": { "kind": "coloring", "sceneNumber": 5, "url": "public/marketing/hero-coloring-page.webp", "storagePath": "demo/coloring/5", "mimeType": "image/webp", "promptHash": "trial", "model": "local-demo", "createdAt": "2026-07-26T00:00:00.000Z", "productionReady": false } },
+    "6": { "story": { "kind": "story", "sceneNumber": 6, "url": "public/marketing/hero-story-page.webp", "storagePath": "demo/story/6", "mimeType": "image/webp", "promptHash": "trial", "model": "local-demo", "createdAt": "2026-07-26T00:00:00.000Z", "productionReady": false }, "coloring": { "kind": "coloring", "sceneNumber": 6, "url": "public/marketing/hero-coloring-page.webp", "storagePath": "demo/coloring/6", "mimeType": "image/webp", "promptHash": "trial", "model": "local-demo", "createdAt": "2026-07-26T00:00:00.000Z", "productionReady": false } },
+    "7": { "story": { "kind": "story", "sceneNumber": 7, "url": "public/marketing/hero-story-page.webp", "storagePath": "demo/story/7", "mimeType": "image/webp", "promptHash": "trial", "model": "local-demo", "createdAt": "2026-07-26T00:00:00.000Z", "productionReady": false }, "coloring": { "kind": "coloring", "sceneNumber": 7, "url": "public/marketing/hero-coloring-page.webp", "storagePath": "demo/coloring/7", "mimeType": "image/webp", "promptHash": "trial", "model": "local-demo", "createdAt": "2026-07-26T00:00:00.000Z", "productionReady": false } },
+    "8": { "story": { "kind": "story", "sceneNumber": 8, "url": "public/marketing/hero-story-page.webp", "storagePath": "demo/story/8", "mimeType": "image/webp", "promptHash": "trial", "model": "local-demo", "createdAt": "2026-07-26T00:00:00.000Z", "productionReady": false }, "coloring": { "kind": "coloring", "sceneNumber": 8, "url": "public/marketing/hero-coloring-page.webp", "storagePath": "demo/coloring/8", "mimeType": "image/webp", "promptHash": "trial", "model": "local-demo", "createdAt": "2026-07-26T00:00:00.000Z", "productionReady": false } }
+  },
+  "imageEditions": {
+    "story": true,
+    "coloring": true,
+    "coloringHasNarrativeText": false
+  },
+  "imageGeneration": {
+    "status": "completed",
+    "jobId": null,
+    "model": "local-demo",
+    "demo": true,
+    "completedAt": "2026-07-26T00:00:00.000Z",
+    "productionReady": false
+  },
+  "imageReview": {
+    "version": 1,
+    "approved": false,
+    "approvedAt": null,
+    "hero": { "approved": false, "note": "", "updatedAt": null },
+    "cover": { "approved": false, "note": "", "updatedAt": null },
+    "scenes": {}
+  }
+}
