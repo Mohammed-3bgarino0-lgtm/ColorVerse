@@ -1,6 +1,10 @@
 (() => {
   'use strict';
 
+  const DRAFT_KEY = 'colorverse-book-draft-v3';
+  const IMAGE_MODE_KEY = 'colorverse-image-ai-mode-v1';
+  const STORY_MODE_KEY = 'colorverse-story-ai-mode-v1';
+  const TRIAL_DATA_URL = 'public/data/colorverse-trial-draft.json';
   const $ = (selector) => document.querySelector(selector);
   const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;',
@@ -24,9 +28,10 @@
     const readyCount = modes.filter(([, ready]) => ready).length;
     const percent = modes.length ? Math.round((readyCount / modes.length) * 100) : 0;
     const productionReady = data.modes?.production === true;
+    const runtimeMode = data.runtime?.mode === 'production' ? 'إنتاجي' : 'تجريبي آمن';
     $('#overall').className = `overall ${productionReady ? 'good' : 'warning'}`;
-    $('#overall').innerHTML = `<b>${percent}%</b><span>${productionReady ? 'جاهز للإنتاج' : 'يحتاج إعدادًا'}</span>`;
-    $('#checkedAt').textContent = `آخر فحص: ${new Date(data.checkedAt).toLocaleString('ar-SA')}`;
+    $('#overall').innerHTML = `<b>${percent}%</b><span>${productionReady ? 'جاهز للإنتاج' : runtimeMode}</span>`;
+    $('#checkedAt').textContent = `آخر فحص: ${new Date(data.checkedAt).toLocaleString('ar-SA')} • ${runtimeMode}`;
 
     $('#modes').innerHTML = modes.map(([key, ready]) => `
       <article class="mode-card ${ready ? 'good' : 'warning'}">
@@ -90,6 +95,31 @@
     }
   }
 
+  async function loadTrialDraft() {
+    const button = $('#loadTrialBtn');
+    const result = $('#trialResult');
+    button.disabled = true;
+    button.textContent = 'جارٍ التحميل…';
+    result.innerHTML = '';
+    try {
+      const response = await fetch(TRIAL_DATA_URL, { headers: { Accept: 'application/json' }, cache: 'no-store' });
+      const draft = await response.json();
+      if (!response.ok || draft.trialData !== true || draft.generatedStory?.scenes?.length !== 8) {
+        throw new Error('ملف بيانات التجربة غير صالح.');
+      }
+      draft.loadedAt = new Date().toISOString();
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+      localStorage.setItem(IMAGE_MODE_KEY, 'demo');
+      localStorage.setItem(STORY_MODE_KEY, 'demo');
+      result.innerHTML = '<div class="success">تم تحميل كتاب «نور والنجمة الزرقاء» داخل هذا المتصفح فقط. الصور تجريبية وسيبقى PDF النهائي مغلقًا.</div><div class="drive-list"><a class="btn secondary" href="create-ai-review.html">فتح مراجعة القصة</a><a class="btn secondary" href="image-review.html">فتح مراجعة الصور</a><a class="btn secondary" href="book-print-ai-review.html?edition=story">معاينة نسخة القصة</a><a class="btn secondary" href="book-print-ai-review.html?edition=coloring">معاينة نسخة التلوين</a></div>';
+    } catch (error) {
+      result.innerHTML = `<div class="error">${esc(error.message || error)}</div>`;
+    } finally {
+      button.disabled = false;
+      button.textContent = 'تحميل بيانات التجربة';
+    }
+  }
+
   async function verifyDrive() {
     const button = $('#verifyDriveBtn');
     const result = $('#driveResult');
@@ -117,6 +147,7 @@
 
   $('#refreshBtn')?.addEventListener('click', load);
   $('#smokeTestBtn')?.addEventListener('click', runSmokeTest);
+  $('#loadTrialBtn')?.addEventListener('click', loadTrialDraft);
   $('#verifyDriveBtn')?.addEventListener('click', verifyDrive);
   load();
 })();
