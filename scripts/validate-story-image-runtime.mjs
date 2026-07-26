@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
 
 const paths = {
+  editionMode: 'public/js/story-edition-mode-runtime.js',
   imageClient: 'public/js/story-image-client.js',
   productionRuntime: 'public/js/story-image-production-runtime.js',
   pdfRuntime: 'public/js/book-print-v3-runtime.js',
@@ -14,15 +15,18 @@ const files = Object.fromEntries(await Promise.all(
   Object.entries(paths).map(async ([key, path]) => [key, await readFile(path, 'utf8')]),
 ));
 
+new Function(files.editionMode);
 new Function(files.imageClient);
 new Function(files.productionRuntime);
 new Function(files.pdfRuntime);
 
 for (const token of [
   'إنتاج نسختين منفصلتين',
+  'نسختان منفصلتان دائمًا',
   'نسخة القصة',
   'نسخة التلوين',
   'coloringHasNarrativeText: false',
+  'story-edition-mode-runtime.js',
   'story-image-client.js',
   'story-image-production-runtime.js',
 ]) {
@@ -33,6 +37,7 @@ for (const token of [
 
 const orderedReviewScripts = [
   'story-parent-review-runtime.js',
+  'story-edition-mode-runtime.js',
   'story-image-client.js',
   'story-image-production-runtime.js',
   'story-pdf-link-runtime.js',
@@ -46,6 +51,9 @@ for (const script of orderedReviewScripts) {
   previous = index;
 }
 
+if (!files.editionMode.includes('value="نسختان منفصلتان"')) {
+  throw new Error('Legacy mixed output controls are not replaced with separate editions.');
+}
 if (!files.promptBuilder.includes('ABSOLUTELY NO story text')) {
   throw new Error('Coloring prompt does not explicitly prohibit narrative text.');
 }
