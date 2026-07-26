@@ -1,16 +1,16 @@
 (() => {
   'use strict';
-  const TARGET = 'book-print-ai-review.html?edition=story';
+  const TARGET = 'image-review.html';
 
   function updateLinks() {
-    document.querySelectorAll('a[href*="book-print-v2.html"], a[href*="book-print.html"]').forEach((link) => {
+    document.querySelectorAll('a[href*="book-print-v2.html"], a[href*="book-print.html"], a[href*="book-print-ai-review.html"]').forEach((link) => {
       link.setAttribute('href', TARGET);
-      if (/PDF/.test(link.textContent || '')) link.textContent = 'فتح نسخة القصة';
+      if (/PDF|كتاب|نسخة/.test(link.textContent || '')) link.textContent = 'مراجعة الصور قبل PDF';
     });
     const direct = document.querySelector('#pdfLink');
     if (direct) {
       direct.setAttribute('href', TARGET);
-      direct.textContent = 'فتح نسخة القصة';
+      direct.textContent = 'مراجعة الصور قبل PDF';
     }
   }
 
