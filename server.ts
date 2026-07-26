@@ -2,18 +2,28 @@ import express from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { storyApiRouter } from './src/server/story-api-router.js';
+import { storyImageApiRouter } from './src/server/story-image-api-router.js';
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
 const dirname = path.dirname(fileURLToPath(import.meta.url));
+const generatedAssetDirectory = process.env.GENERATED_ASSET_DIR
+  ? path.resolve(process.env.GENERATED_ASSET_DIR)
+  : path.join(dirname, 'generated-assets');
 
 app.use(express.json({ limit: '10mb' }));
+app.use('/generated-assets', express.static(generatedAssetDirectory, {
+  fallthrough: true,
+  immutable: false,
+  maxAge: '1h',
+}));
 
 app.get('/api/health', (_request, response) => {
   response.json({ ok: true, service: 'colorverse', timestamp: new Date().toISOString() });
 });
 
 app.use('/api/stories', storyApiRouter);
+app.use('/api/story-images', storyImageApiRouter);
 
 app.post('/api/auth/google', async (request, response) => {
   const token = request.body?.token;
