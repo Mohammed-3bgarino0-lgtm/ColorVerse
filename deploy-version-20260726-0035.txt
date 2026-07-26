@@ -1,0 +1,2 @@
+Force GitHub Pages rebuild after publishing create.html and book-print-v2.html to both main and gh-pages.
+Timestamp: 2026-07-26T00:35:00Z
