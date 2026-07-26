@@ -2,9 +2,7 @@ name: Deploy ColorVerse Pages
 
 on:
   push:
-    branches: [main]
-    paths:
-      - '.github/workflows/deploy-gh-pages-official.yml'
+    branches: [main, gh-pages]
   workflow_dispatch:
 
 permissions:
