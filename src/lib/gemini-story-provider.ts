@@ -1,5 +1,6 @@
 import { GoogleGenAI } from '@google/genai';
 import {
+  GeneratedStoryValidationError,
   generatedStoryJsonSchema,
   parseGeneratedStoryDocument,
   type GeneratedStoryDocument,
@@ -188,7 +189,12 @@ export class GeminiStoryProvider implements StoryProvider {
           : undefined,
       };
     } catch (error) {
-      if (error instanceof StoryProviderError) throw error;
+      if (
+        error instanceof StoryProviderError ||
+        error instanceof GeneratedStoryValidationError
+      ) {
+        throw error;
+      }
 
       throw new StoryProviderError(
         'PROVIDER_ERROR',
